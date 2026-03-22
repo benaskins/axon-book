@@ -108,7 +108,7 @@ func run() error {
 	})
 
 	summaryStore := gl.NewDailySummaryStore(db)
-	handler := gl.NewHandler(ledger, accounts, projection, summaryStore)
+	handler := gl.NewHandler(ledger, accounts, projection, summaryStore, events)
 	handler.RegisterRoutes(mux, requireAuth)
 
 	// Serve embedded SvelteKit UI

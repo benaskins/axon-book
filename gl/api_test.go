@@ -2,6 +2,7 @@ package gl
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -22,6 +23,7 @@ func newTestHandler(accounts map[string]AccountType) (*Handler, *http.ServeMux) 
 		accounts:   nil, // chart of accounts CRUD not tested here (needs Postgres)
 		projection: projection,
 		summaries:  nil, // daily summaries not tested here (needs Postgres)
+		events:     store,
 	}
 
 	mux := http.NewServeMux()
@@ -273,6 +275,109 @@ func postJSON(t *testing.T, mux *http.ServeMux, path, body string) {
 	mux.ServeHTTP(w, req)
 	if w.Code != http.StatusCreated {
 		t.Fatalf("POST %s: status = %d, want 201; body: %s", path, w.Code, w.Body.String())
+	}
+}
+
+func TestAPI_Events(t *testing.T) {
+	// Manually populate both streams to avoid MemoryStore mutex deadlock
+	// (reactor calls Append inside Append's projector loop).
+	store := fact.NewMemoryStore()
+	handler := &Handler{events: store}
+	mux := http.NewServeMux()
+	noAuth := func(h http.Handler) http.Handler { return h }
+	handler.RegisterRoutes(mux, noAuth)
+
+	ctx := context.Background()
+	opID1 := "op-001"
+	opID2 := "op-002"
+
+	// Operations stream
+	store.Append(ctx, StreamOperations, []fact.Event{
+		{ID: opID1, Type: EventInvestmentMade, Data: json.RawMessage(`{"date":"2025-01-01","amount":"5000","description":"Initial investment"}`)},
+		{ID: opID2, Type: EventSaleCompleted, Data: json.RawMessage(`{"date":"2025-03-01","cups":10,"price_per_cup":"3.50","weather":"warm"}`)},
+	})
+
+	// Ledger stream with causation links
+	entryData := json.RawMessage(`{"entry_id":"je-001","date":"2025-01-01T00:00:00Z","description":"Initial investment","lines":[{"account":"1000","debit":"5000"},{"account":"3000","credit":"5000"}]}`)
+	store.Append(ctx, StreamLedger, []fact.Event{
+		{ID: "je-001", Type: "journal_entry.posted", Data: entryData, Metadata: map[string]string{"causation_id": opID1}},
+	})
+
+	req := httptest.NewRequest("GET", "/api/events", nil)
+	w := httptest.NewRecorder()
+	mux.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("status = %d, want 200; body: %s", w.Code, w.Body.String())
+	}
+
+	var events []struct {
+		ID           string           `json:"id"`
+		Type         string           `json:"type"`
+		Data         json.RawMessage  `json:"data"`
+		JournalEntry *json.RawMessage `json:"journal_entry"`
+	}
+	if err := json.NewDecoder(w.Body).Decode(&events); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+
+	if len(events) != 2 {
+		t.Fatalf("got %d events, want 2", len(events))
+	}
+
+	if events[0].Type != EventInvestmentMade {
+		t.Errorf("events[0].type = %s, want %s", events[0].Type, EventInvestmentMade)
+	}
+	if events[0].JournalEntry == nil {
+		t.Error("events[0] should have a linked journal entry")
+	}
+
+	if events[1].Type != EventSaleCompleted {
+		t.Errorf("events[1].type = %s, want %s", events[1].Type, EventSaleCompleted)
+	}
+	if events[1].JournalEntry != nil {
+		t.Error("events[1] should NOT have a journal entry (none linked)")
+	}
+
+	// Verify journal entry content
+	var entry JournalEntryPosted
+	if err := json.Unmarshal(*events[0].JournalEntry, &entry); err != nil {
+		t.Fatalf("unmarshal journal entry: %v", err)
+	}
+	if len(entry.Lines) != 2 {
+		t.Errorf("investment entry has %d lines, want 2", len(entry.Lines))
+	}
+}
+
+func TestAPI_Events_WithLimit(t *testing.T) {
+	store := fact.NewMemoryStore()
+	handler := &Handler{events: store}
+	mux := http.NewServeMux()
+	noAuth := func(h http.Handler) http.Handler { return h }
+	handler.RegisterRoutes(mux, noAuth)
+
+	ctx := context.Background()
+	var batch []fact.Event
+	for i := 0; i < 5; i++ {
+		batch = append(batch, fact.Event{
+			Type: EventInvestmentMade,
+			Data: json.RawMessage(`{"date":"2025-01-01","amount":"1000","description":"Investment"}`),
+		})
+	}
+	store.Append(ctx, StreamOperations, batch)
+
+	req := httptest.NewRequest("GET", "/api/events?limit=3", nil)
+	w := httptest.NewRecorder()
+	mux.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("status = %d, want 200; body: %s", w.Code, w.Body.String())
+	}
+
+	var events []json.RawMessage
+	json.NewDecoder(w.Body).Decode(&events)
+	if len(events) != 3 {
+		t.Errorf("got %d events, want 3", len(events))
 	}
 }
 

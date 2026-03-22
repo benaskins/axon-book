@@ -2,11 +2,13 @@ package gl
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/benaskins/axon"
+	fact "github.com/benaskins/axon-fact"
 	"github.com/shopspring/decimal"
 )
 
@@ -16,16 +18,18 @@ type Handler struct {
 	accounts      *ChartOfAccounts
 	projection    *BalanceProjection
 	summaries     *DailySummaryStore
+	events        fact.EventStore
 	accountTypeFn func(string) AccountType // override for testing
 }
 
 // NewHandler creates an API handler for the general ledger.
-func NewHandler(ledger *Ledger, accounts *ChartOfAccounts, projection *BalanceProjection, summaries *DailySummaryStore) *Handler {
+func NewHandler(ledger *Ledger, accounts *ChartOfAccounts, projection *BalanceProjection, summaries *DailySummaryStore, events fact.EventStore) *Handler {
 	h := &Handler{
 		ledger:     ledger,
 		accounts:   accounts,
 		projection: projection,
 		summaries:  summaries,
+		events:     events,
 	}
 	h.accountTypeFn = h.accountTypeLookup
 	return h
@@ -205,8 +209,12 @@ func (h *Handler) PostEntry(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
+	if err := req.Validate(); err != nil {
+		axon.WriteError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
 
-	date, _ := time.Parse("2006-01-02", req.Date) // already validated
+	date, _ := time.Parse("2006-01-02", req.Date)
 
 	lines := make([]Line, len(req.Lines))
 	for i, l := range req.Lines {
@@ -367,6 +375,77 @@ func (h *Handler) MonthlySummaries(w http.ResponseWriter, r *http.Request) {
 	axon.WriteJSON(w, http.StatusOK, summaries)
 }
 
+// pairedEvent pairs a domain event from the operations stream with its
+// causation-linked journal entry from the ledger stream.
+type pairedEvent struct {
+	ID          string            `json:"id"`
+	Type        string            `json:"type"`
+	Data        json.RawMessage   `json:"data"`
+	Metadata    map[string]string `json:"metadata,omitempty"`
+	Sequence    int64             `json:"sequence"`
+	OccurredAt  time.Time         `json:"occurred_at"`
+	JournalEntry *json.RawMessage `json:"journal_entry,omitempty"`
+}
+
+// Events handles GET /api/events — returns domain events paired with their
+// journal entries. Supports ?stream=operations (default) and ?limit=N.
+func (h *Handler) Events(w http.ResponseWriter, r *http.Request) {
+	if h.events == nil {
+		axon.WriteError(w, http.StatusServiceUnavailable, "event store not configured")
+		return
+	}
+
+	ctx := r.Context()
+
+	ops, err := h.events.Load(ctx, StreamOperations)
+	if err != nil {
+		axon.WriteError(w, http.StatusInternalServerError, "failed to load operations events")
+		return
+	}
+
+	ledger, err := h.events.Load(ctx, StreamLedger)
+	if err != nil {
+		axon.WriteError(w, http.StatusInternalServerError, "failed to load ledger events")
+		return
+	}
+
+	// Index ledger events by causation_id for O(1) lookup
+	byCausation := make(map[string]fact.Event, len(ledger))
+	for _, e := range ledger {
+		if cid, ok := e.Metadata["causation_id"]; ok {
+			byCausation[cid] = e
+		}
+	}
+
+	// Pair each operation event with its journal entry
+	result := make([]pairedEvent, 0, len(ops))
+	for _, op := range ops {
+		pe := pairedEvent{
+			ID:         op.ID,
+			Type:       op.Type,
+			Data:       op.Data,
+			Metadata:   op.Metadata,
+			Sequence:   op.Sequence,
+			OccurredAt: op.OccurredAt,
+		}
+		if je, ok := byCausation[op.ID]; ok {
+			data := json.RawMessage(je.Data)
+			pe.JournalEntry = &data
+		}
+		result = append(result, pe)
+	}
+
+	// Apply limit if requested
+	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
+		var limit int
+		if _, err := fmt.Sscanf(limitStr, "%d", &limit); err == nil && limit > 0 && limit < len(result) {
+			result = result[:limit]
+		}
+	}
+
+	axon.WriteJSON(w, http.StatusOK, result)
+}
+
 // RegisterRoutes registers all ledger API routes on the given mux.
 // All routes are wrapped with the provided auth middleware.
 // The root index endpoint is unauthenticated.
@@ -390,6 +469,9 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.Handl
 	// Summaries (read-only, unauthenticated for public UI)
 	mux.HandleFunc("GET /api/daily-summaries", h.DailySummaries)
 	mux.HandleFunc("GET /api/monthly-summary", h.MonthlySummaries)
+
+	// Events (read-only, unauthenticated for public UI)
+	mux.HandleFunc("GET /api/events", h.Events)
 }
 
 // Index handles GET / — unauthenticated API index.
