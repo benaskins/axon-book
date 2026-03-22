@@ -383,13 +383,13 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.Handl
 	// Journal entries
 	mux.Handle("POST /api/entries", requireAuth(http.HandlerFunc(h.PostEntry)))
 
-	// Reports
-	mux.Handle("GET /api/trial-balance", requireAuth(http.HandlerFunc(h.TrialBalance)))
-	mux.Handle("GET /api/profit-and-loss", requireAuth(http.HandlerFunc(h.ProfitAndLoss)))
+	// Reports (read-only, unauthenticated for public UI)
+	mux.HandleFunc("GET /api/trial-balance", h.TrialBalance)
+	mux.HandleFunc("GET /api/profit-and-loss", h.ProfitAndLoss)
 
-	// Summaries
-	mux.Handle("GET /api/daily-summaries", requireAuth(http.HandlerFunc(h.DailySummaries)))
-	mux.Handle("GET /api/monthly-summary", requireAuth(http.HandlerFunc(h.MonthlySummaries)))
+	// Summaries (read-only, unauthenticated for public UI)
+	mux.HandleFunc("GET /api/daily-summaries", h.DailySummaries)
+	mux.HandleFunc("GET /api/monthly-summary", h.MonthlySummaries)
 }
 
 // Index handles GET / — unauthenticated API index.
