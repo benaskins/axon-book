@@ -83,7 +83,10 @@ func run() error {
 	slog.Info("projections rebuilt", "currency", baseCurrency)
 
 	// --- Auth ---
-	authClient := axon.NewAuthClientPlain(authURL)
+	authClient, err := axon.NewAuthClient(authURL)
+	if err != nil {
+		return fmt.Errorf("create auth client: %w", err)
+	}
 	requireAuth := axon.RequireAuth(authClient)
 
 	// --- HTTP ---
