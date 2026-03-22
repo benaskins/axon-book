@@ -27,8 +27,16 @@ type Reactor struct {
 }
 
 // NewReactor creates a reactor that posts journal entries via the given ledger.
+// If ledger is nil, call SetLedger before use (allows breaking circular init).
 func NewReactor(ledger *Ledger) *Reactor {
 	return &Reactor{ledger: ledger}
+}
+
+// SetLedger configures the ledger used to post journal entries.
+// This breaks the circular dependency when the reactor, store, and ledger
+// must be created in sequence.
+func (r *Reactor) SetLedger(ledger *Ledger) {
+	r.ledger = ledger
 }
 
 // Handle processes a single event. Only operations stream events are acted on;

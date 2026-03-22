@@ -1,9 +1,9 @@
 // Seed populates the general ledger with a lemonade stand chart of accounts
-// and a year of simulated journal entries.
+// and a year of simulated operations via domain events.
 //
-// Based on the classic Lemonade Stand video game: buy supplies, make lemonade,
-// sell cups, deal with weather. Generates realistic seasonal patterns —
-// busy summers, quiet winters, weather-driven demand, spoilage, and advertising.
+// Domain events (sale.completed, supply.purchased, etc.) are emitted to the
+// operations stream. The Reactor projector automatically translates them into
+// journal entries on the ledger stream — both within the same transaction.
 //
 // Usage:
 //
@@ -13,6 +13,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"math/rand"
@@ -22,6 +23,7 @@ import (
 	"github.com/benaskins/axon"
 	fact "github.com/benaskins/axon-fact"
 	"github.com/benaskins/axon-book/gl"
+	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 )
 
@@ -59,9 +61,17 @@ func run() error {
 
 	// --- Domain ---
 	projection := gl.NewBalanceProjection()
-	events := fact.NewPostgresStore(db, fact.WithPgProjector(projection))
 	accounts := gl.NewChartOfAccounts(db)
-	ledger := gl.NewLedger(events, accounts, "AUD")
+
+	// Wire up the reactor: domain events → journal entries
+	var store *fact.PostgresStore
+	reactor := gl.NewReactor(nil) // placeholder, set ledger after store creation
+	store = fact.NewPostgresStore(db,
+		fact.WithPgProjector(reactor),
+		fact.WithPgProjector(projection),
+	)
+	ledger := gl.NewLedger(store, accounts, "AUD")
+	reactor.SetLedger(ledger)
 
 	// --- Seed chart of accounts ---
 	slog.Info("seeding chart of accounts")
@@ -69,18 +79,14 @@ func run() error {
 		return fmt.Errorf("seed accounts: %w", err)
 	}
 
-	// --- Generate journal entries ---
-	slog.Info("generating journal entries", "year", year)
-	stats, err := generateEntries(ctx, ledger, year)
+	// --- Generate domain events ---
+	slog.Info("generating operations", "year", year)
+	stats, err := generateEvents(ctx, store, year)
 	if err != nil {
-		return fmt.Errorf("generate entries: %w", err)
+		return fmt.Errorf("generate events: %w", err)
 	}
 
-	slog.Info("seed complete",
-		"entries", stats.entries,
-		"revenue", stats.revenue.StringFixed(2),
-		"expenses", stats.expenses.StringFixed(2),
-	)
+	slog.Info("seed complete", "domain_events", stats.events)
 
 	// --- Print trial balance ---
 	tb := projection.TrialBalance()
@@ -95,19 +101,10 @@ func run() error {
 }
 
 type seedStats struct {
-	entries  int
-	revenue  decimal.Decimal
-	expenses decimal.Decimal
+	events int
 }
 
 // --- Chart of Accounts ---
-//
-// Modelled on a lemonade stand business:
-//
-// Assets:     Cash, Inventory (lemons, sugar, cups, ice)
-// Equity:     Owner's equity, retained earnings
-// Revenue:    Lemonade sales
-// Expenses:   COGS, advertising, stand permit, spoilage
 
 var chartOfAccounts = []struct {
 	number string
@@ -157,40 +154,24 @@ func seedAccounts(ctx context.Context, coa *gl.ChartOfAccounts) error {
 	return nil
 }
 
-// --- Entry Generation ---
+// --- Event Generation ---
 //
-// Simulates a year of lemonade stand operations:
-//
-// - Jan 1: Owner invests starting capital
-// - Monthly: Stand permit fee
-// - Weekly: Buy inventory (lemons, sugar, cups)
-// - Daily: Buy ice (doesn't keep), sell lemonade
-// - Weekly: Advertising (signs)
-// - Occasional: Spoilage from bad weather or overstock
-//
-// Sales volume depends on:
-// - Season (summer peak, winter trough)
-// - Day of week (weekends busier)
-// - Weather (random hot/mild/cold/rainy days)
+// Emits domain events to the operations stream. The Reactor projector
+// handles translation into journal entries automatically.
 
-func generateEntries(ctx context.Context, ledger *gl.Ledger, year int) (seedStats, error) {
+func generateEvents(ctx context.Context, store fact.EventStore, year int) (seedStats, error) {
 	rng := rand.New(rand.NewSource(int64(year)))
 	var stats seedStats
-	d := decimal.NewFromInt
 
 	// --- Owner investment ---
-	if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-		Date:        date(year, 1, 1),
+	if err := emit(ctx, store, gl.EventInvestmentMade, gl.InvestmentMade{
+		Date:        dateStr(year, 1, 1),
+		Amount:      decimal.NewFromInt(5000),
 		Description: "Owner's initial investment",
-		Kind:        gl.Operating,
-		Lines: []gl.Line{
-			{Account: "1000", Debit: d(5000)},
-			{Account: "3000", Credit: d(5000)},
-		},
 	}); err != nil {
 		return stats, fmt.Errorf("owner investment: %w", err)
 	}
-	stats.entries++
+	stats.events++
 
 	start := date(year, 1, 1)
 	end := date(year, 12, 31)
@@ -198,69 +179,47 @@ func generateEntries(ctx context.Context, ledger *gl.Ledger, year int) (seedStat
 	for day := start; !day.After(end); day = day.AddDate(0, 0, 1) {
 		month := day.Month()
 		weekday := day.Weekday()
+		ds := day.Format("2006-01-02")
 
 		// --- Monthly: Stand permit (1st of each month, Mar-Oct) ---
 		if day.Day() == 1 && month >= time.March && month <= time.October {
-			permit := d(50)
-			if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-				Date:        day,
+			if err := emit(ctx, store, gl.EventPermitPaid, gl.PermitPaid{
+				Date:        ds,
+				Amount:      decimal.NewFromInt(50),
 				Description: fmt.Sprintf("Stand permit - %s", month),
-				Kind:        gl.Operating,
-				Lines: []gl.Line{
-					{Account: "5500", Debit: permit},
-					{Account: "1000", Credit: permit},
-				},
 			}); err != nil {
 				return stats, err
 			}
-			stats.entries++
-			stats.expenses = stats.expenses.Add(permit)
+			stats.events++
 		}
 
 		// --- Weekly inventory purchase (Monday) ---
 		if weekday == time.Monday && month >= time.March && month <= time.October {
-			seasonMultiplier := seasonFactor(month)
-
-			lemons := d(int64(30 * seasonMultiplier))
-			sugar := d(int64(15 * seasonMultiplier))
-			cups := d(int64(10 * seasonMultiplier))
-
-			total := lemons.Add(sugar).Add(cups)
-
-			if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-				Date:        day,
-				Description: "Weekly supply run",
-				Kind:        gl.Operating,
-				SourceType:  "purchase_order",
-				SourceRef:   fmt.Sprintf("po-%s", day.Format("20060102")),
-				Lines: []gl.Line{
-					{Account: "1100", Debit: lemons, Description: "Lemons"},
-					{Account: "1200", Debit: sugar, Description: "Sugar"},
-					{Account: "1300", Debit: cups, Description: "Cups"},
-					{Account: "1000", Credit: total},
+			sf := seasonFactor(month)
+			if err := emit(ctx, store, gl.EventSupplyPurchased, gl.SupplyPurchased{
+				Date: ds,
+				Ref:  fmt.Sprintf("po-%s", day.Format("20060102")),
+				Items: []gl.SupplyItem{
+					{Name: "Lemons", Account: "1100", Quantity: int(30 * sf), Cost: decimal.NewFromInt(int64(30 * sf))},
+					{Name: "Sugar", Account: "1200", Quantity: int(15 * sf), Cost: decimal.NewFromInt(int64(15 * sf))},
+					{Name: "Cups", Account: "1300", Quantity: int(100 * sf), Cost: decimal.NewFromInt(int64(10 * sf))},
 				},
 			}); err != nil {
 				return stats, err
 			}
-			stats.entries++
+			stats.events++
 		}
 
 		// --- Weekly advertising (Wednesday, peak season) ---
 		if weekday == time.Wednesday && month >= time.April && month <= time.September {
-			signs := d(int64(15 + rng.Intn(20)))
-			if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-				Date:        day,
+			if err := emit(ctx, store, gl.EventAdvertisingPurchased, gl.AdvertisingPurchased{
+				Date:        ds,
+				Amount:      decimal.NewFromInt(int64(15 + rng.Intn(20))),
 				Description: "Advertising - signs and flyers",
-				Kind:        gl.Operating,
-				Lines: []gl.Line{
-					{Account: "5400", Debit: signs},
-					{Account: "1000", Credit: signs},
-				},
 			}); err != nil {
 				return stats, err
 			}
-			stats.entries++
-			stats.expenses = stats.expenses.Add(signs)
+			stats.events++
 		}
 
 		// --- Daily operations (only open Mar-Oct, not rainy) ---
@@ -270,130 +229,98 @@ func generateEntries(ctx context.Context, ledger *gl.Ledger, year int) (seedStat
 
 		weather := randomWeather(rng, month)
 		if weather == "rainy" {
-			// Rainy day — spoilage of ice, no sales
+			// Rainy day — possible spoilage of ice, no sales
 			if rng.Float64() < 0.5 {
-				spoilage := d(int64(5 + rng.Intn(15)))
-				if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-					Date:        day,
-					Description: "Ice melted - rainy day, stand closed",
-					Kind:        gl.Operating,
-					Lines: []gl.Line{
-						{Account: "5600", Debit: spoilage},
-						{Account: "1400", Credit: spoilage},
-					},
+				if err := emit(ctx, store, gl.EventSpoilageRecorded, gl.SpoilageRecorded{
+					Date:    ds,
+					Item:    "ice",
+					Account: "1400",
+					Amount:  decimal.NewFromInt(int64(5 + rng.Intn(15))),
+					Reason:  "rain",
 				}); err != nil {
 					return stats, err
 				}
-				stats.entries++
-				stats.expenses = stats.expenses.Add(spoilage)
+				stats.events++
 			}
 			continue
 		}
 
 		// --- Buy ice (daily, doesn't keep) ---
-		iceCost := d(int64(8 + rng.Intn(7)))
+		iceCost := decimal.NewFromInt(int64(8 + rng.Intn(7)))
 		if weather == "hot" {
-			iceCost = iceCost.Add(d(int64(5 + rng.Intn(5))))
+			iceCost = iceCost.Add(decimal.NewFromInt(int64(5 + rng.Intn(5))))
 		}
 
-		if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-			Date:        day,
-			Description: "Daily ice purchase",
-			Kind:        gl.Operating,
-			Lines: []gl.Line{
-				{Account: "1400", Debit: iceCost},
-				{Account: "1000", Credit: iceCost},
-			},
+		if err := emit(ctx, store, gl.EventIcePurchased, gl.IcePurchased{
+			Date: ds,
+			Cost: iceCost,
 		}); err != nil {
 			return stats, err
 		}
-		stats.entries++
+		stats.events++
 
 		// --- Sales ---
 		cups := dailyCups(rng, month, weekday, weather)
-		pricePerCup := cupPrice(weather)
-		salesRevenue := pricePerCup.Mul(decimal.NewFromInt(int64(cups)))
-
 		if cups > 0 {
-			if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-				Date:        day,
-				Description: fmt.Sprintf("Lemonade sales - %d cups @ $%s (%s)", cups, pricePerCup.StringFixed(2), weather),
-				Kind:        gl.Operating,
-				Lines: []gl.Line{
-					{Account: "1000", Debit: salesRevenue},
-					{Account: "4000", Credit: salesRevenue},
-				},
+			if err := emit(ctx, store, gl.EventSaleCompleted, gl.SaleCompleted{
+				Date:        ds,
+				Cups:        cups,
+				PricePerCup: cupPrice(weather),
+				Weather:     weather,
 			}); err != nil {
 				return stats, err
 			}
-			stats.entries++
-			stats.revenue = stats.revenue.Add(salesRevenue)
-
-			// COGS — consume inventory
-			cogsLemons := d(int64(cups)).Mul(decimal.NewFromFloat(0.50))
-			cogsSugar := d(int64(cups)).Mul(decimal.NewFromFloat(0.20))
-			cogsCups := d(int64(cups)).Mul(decimal.NewFromFloat(0.10))
-			cogsIce := d(int64(cups)).Mul(decimal.NewFromFloat(0.30))
-			totalCogs := cogsLemons.Add(cogsSugar).Add(cogsCups).Add(cogsIce)
-
-			if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-				Date:        day,
-				Description: fmt.Sprintf("COGS - %d cups", cups),
-				Kind:        gl.Operating,
-				Lines: []gl.Line{
-					{Account: "5000", Debit: cogsLemons, Description: "Lemons"},
-					{Account: "5100", Debit: cogsSugar, Description: "Sugar"},
-					{Account: "5200", Debit: cogsCups, Description: "Cups"},
-					{Account: "5300", Debit: cogsIce, Description: "Ice"},
-					{Account: "1100", Credit: cogsLemons},
-					{Account: "1200", Credit: cogsSugar},
-					{Account: "1300", Credit: cogsCups},
-					{Account: "1400", Credit: cogsIce},
-				},
-			}); err != nil {
-				return stats, err
-			}
-			stats.entries++
-			stats.expenses = stats.expenses.Add(totalCogs)
+			stats.events++
 		}
 
 		// --- Occasional spoilage (overripe lemons, end of week) ---
 		if weekday == time.Friday && rng.Float64() < 0.15 {
-			spoilage := d(int64(5 + rng.Intn(20)))
-			if _, err := ledger.Post(ctx, gl.JournalEntryPosted{
-				Date:        day,
-				Description: "Spoilage - overripe lemons discarded",
-				Kind:        gl.Operating,
-				Lines: []gl.Line{
-					{Account: "5600", Debit: spoilage},
-					{Account: "1100", Credit: spoilage},
-				},
+			if err := emit(ctx, store, gl.EventSpoilageRecorded, gl.SpoilageRecorded{
+				Date:    ds,
+				Item:    "lemons",
+				Account: "1100",
+				Amount:  decimal.NewFromInt(int64(5 + rng.Intn(20))),
+				Reason:  "overripe",
 			}); err != nil {
 				return stats, err
 			}
-			stats.entries++
-			stats.expenses = stats.expenses.Add(spoilage)
+			stats.events++
 		}
 	}
 
 	return stats, nil
 }
 
+// emit marshals event data and appends it to the operations stream.
+func emit(ctx context.Context, store fact.EventStore, eventType string, data any) error {
+	payload, err := json.Marshal(data)
+	if err != nil {
+		return fmt.Errorf("marshal %s: %w", eventType, err)
+	}
+	return store.Append(ctx, gl.StreamOperations, []fact.Event{
+		{ID: uuid.New().String(), Type: eventType, Data: payload},
+	})
+}
+
 func date(year int, month time.Month, day int) time.Time {
 	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+}
+
+func dateStr(year int, month time.Month, day int) string {
+	return date(year, month, day).Format("2006-01-02")
 }
 
 // seasonFactor returns a multiplier for inventory/sales based on month.
 func seasonFactor(m time.Month) float64 {
 	switch m {
 	case time.June, time.July, time.August:
-		return 2.0 // summer peak
+		return 2.0
 	case time.May, time.September:
-		return 1.5 // shoulder season
+		return 1.5
 	case time.April, time.October:
-		return 1.0 // early/late season
+		return 1.0
 	default:
-		return 0.5 // off season
+		return 0.5
 	}
 }
 
@@ -402,7 +329,6 @@ func randomWeather(rng *rand.Rand, m time.Month) string {
 	r := rng.Float64()
 	switch {
 	case m >= time.June && m <= time.August:
-		// Summer: mostly hot
 		if r < 0.5 {
 			return "hot"
 		} else if r < 0.85 {
@@ -412,7 +338,6 @@ func randomWeather(rng *rand.Rand, m time.Month) string {
 		}
 		return "rainy"
 	case m >= time.April && m <= time.May || m >= time.September && m <= time.October:
-		// Shoulder: mixed
 		if r < 0.2 {
 			return "hot"
 		} else if r < 0.55 {
@@ -422,7 +347,6 @@ func randomWeather(rng *rand.Rand, m time.Month) string {
 		}
 		return "rainy"
 	default:
-		// Off-season
 		if r < 0.1 {
 			return "mild"
 		} else if r < 0.5 {
@@ -437,7 +361,6 @@ func dailyCups(rng *rand.Rand, month time.Month, weekday time.Weekday, weather s
 	base := 20.0
 	base *= seasonFactor(month)
 
-	// Weather
 	switch weather {
 	case "hot":
 		base *= 1.8
@@ -447,12 +370,10 @@ func dailyCups(rng *rand.Rand, month time.Month, weekday time.Weekday, weather s
 		base *= 0.4
 	}
 
-	// Weekends busier
 	if weekday == time.Saturday || weekday == time.Sunday {
 		base *= 1.5
 	}
 
-	// Add some randomness (±30%)
 	jitter := 0.7 + rng.Float64()*0.6
 	cups := int(base * jitter)
 	if cups < 0 {
@@ -474,4 +395,3 @@ func cupPrice(weather string) decimal.Decimal {
 		return decimal.NewFromFloat(2.50)
 	}
 }
-

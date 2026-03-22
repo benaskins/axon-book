@@ -72,9 +72,17 @@ func run() error {
 
 	// --- Domain ---
 	projection := gl.NewBalanceProjection()
-	events := fact.NewPostgresStore(db, fact.WithPgProjector(projection))
 	accounts := gl.NewChartOfAccounts(db)
+
+	// Wire reactor: domain events on operations → journal entries on ledger.
+	// The reactor, store, and ledger form a cycle; SetLedger breaks it.
+	reactor := gl.NewReactor(nil)
+	events := fact.NewPostgresStore(db,
+		fact.WithPgProjector(reactor),
+		fact.WithPgProjector(projection),
+	)
 	ledger := gl.NewLedger(events, accounts, baseCurrency)
+	reactor.SetLedger(ledger)
 
 	// Replay persisted events to rebuild projections
 	if err := events.Replay(ctx); err != nil {
