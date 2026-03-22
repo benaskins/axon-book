@@ -21,6 +21,7 @@ func newTestHandler(accounts map[string]AccountType) (*Handler, *http.ServeMux) 
 		ledger:     ledger,
 		accounts:   nil, // chart of accounts CRUD not tested here (needs Postgres)
 		projection: projection,
+		summaries:  nil, // daily summaries not tested here (needs Postgres)
 	}
 
 	mux := http.NewServeMux()

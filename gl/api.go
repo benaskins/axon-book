@@ -15,15 +15,17 @@ type Handler struct {
 	ledger        *Ledger
 	accounts      *ChartOfAccounts
 	projection    *BalanceProjection
+	summaries     *DailySummaryStore
 	accountTypeFn func(string) AccountType // override for testing
 }
 
 // NewHandler creates an API handler for the general ledger.
-func NewHandler(ledger *Ledger, accounts *ChartOfAccounts, projection *BalanceProjection) *Handler {
+func NewHandler(ledger *Ledger, accounts *ChartOfAccounts, projection *BalanceProjection, summaries *DailySummaryStore) *Handler {
 	h := &Handler{
 		ledger:     ledger,
 		accounts:   accounts,
 		projection: projection,
+		summaries:  summaries,
 	}
 	h.accountTypeFn = h.accountTypeLookup
 	return h
@@ -326,6 +328,45 @@ func (h *Handler) accountTypeLookup(number string) AccountType {
 	return acct.Type
 }
 
+// DailySummaries handles GET /api/daily-summaries?from=YYYY-MM-DD&to=YYYY-MM-DD
+func (h *Handler) DailySummaries(w http.ResponseWriter, r *http.Request) {
+	from := r.URL.Query().Get("from")
+	to := r.URL.Query().Get("to")
+
+	if from == "" || to == "" {
+		axon.WriteError(w, http.StatusBadRequest, "from and to query parameters required (YYYY-MM-DD)")
+		return
+	}
+
+	if _, err := time.Parse("2006-01-02", from); err != nil {
+		axon.WriteError(w, http.StatusBadRequest, "from must be YYYY-MM-DD")
+		return
+	}
+	if _, err := time.Parse("2006-01-02", to); err != nil {
+		axon.WriteError(w, http.StatusBadRequest, "to must be YYYY-MM-DD")
+		return
+	}
+
+	summaries, err := h.summaries.List(r.Context(), from, to)
+	if err != nil {
+		axon.WriteError(w, http.StatusInternalServerError, "failed to query daily summaries")
+		return
+	}
+
+	axon.WriteJSON(w, http.StatusOK, summaries)
+}
+
+// MonthlySummaries handles GET /api/monthly-summary
+func (h *Handler) MonthlySummaries(w http.ResponseWriter, r *http.Request) {
+	summaries, err := h.summaries.MonthlySummary(r.Context())
+	if err != nil {
+		axon.WriteError(w, http.StatusInternalServerError, "failed to query monthly summaries")
+		return
+	}
+
+	axon.WriteJSON(w, http.StatusOK, summaries)
+}
+
 // RegisterRoutes registers all ledger API routes on the given mux.
 // All routes are wrapped with the provided auth middleware.
 // The root index endpoint is unauthenticated.
@@ -345,6 +386,10 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.Handl
 	// Reports
 	mux.Handle("GET /api/trial-balance", requireAuth(http.HandlerFunc(h.TrialBalance)))
 	mux.Handle("GET /api/profit-and-loss", requireAuth(http.HandlerFunc(h.ProfitAndLoss)))
+
+	// Summaries
+	mux.Handle("GET /api/daily-summaries", requireAuth(http.HandlerFunc(h.DailySummaries)))
+	mux.Handle("GET /api/monthly-summary", requireAuth(http.HandlerFunc(h.MonthlySummaries)))
 }
 
 // Index handles GET / — unauthenticated API index.
@@ -361,6 +406,8 @@ func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
 			{"method": "POST", "path": "/api/entries", "description": "Post journal entry"},
 			{"method": "GET", "path": "/api/trial-balance", "description": "Trial balance"},
 			{"method": "GET", "path": "/api/profit-and-loss?from=YYYY-MM-DD&to=YYYY-MM-DD", "description": "Profit and loss"},
+			{"method": "GET", "path": "/api/daily-summaries?from=YYYY-MM-DD&to=YYYY-MM-DD", "description": "Daily summaries"},
+			{"method": "GET", "path": "/api/monthly-summary", "description": "Monthly summary"},
 		},
 	})
 }

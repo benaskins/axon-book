@@ -72,6 +72,7 @@ func run() error {
 
 	// --- Domain ---
 	projection := gl.NewBalanceProjection()
+	dailySummaryProjection := gl.NewDailySummaryProjection(db)
 	accounts := gl.NewChartOfAccounts(db)
 
 	// Wire reactor: domain events on operations → journal entries on ledger.
@@ -80,6 +81,7 @@ func run() error {
 	events := fact.NewPostgresStore(db,
 		fact.WithPgProjector(reactor),
 		fact.WithPgProjector(projection),
+		fact.WithPgProjector(dailySummaryProjection),
 	)
 	ledger := gl.NewLedger(events, accounts, baseCurrency)
 	reactor.SetLedger(ledger)
@@ -104,7 +106,8 @@ func run() error {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	handler := gl.NewHandler(ledger, accounts, projection)
+	summaryStore := gl.NewDailySummaryStore(db)
+	handler := gl.NewHandler(ledger, accounts, projection, summaryStore)
 	handler.RegisterRoutes(mux, requireAuth)
 
 	slog.Info("serving", "port", port, "auth_url", authURL)
