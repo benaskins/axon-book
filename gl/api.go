@@ -2,7 +2,7 @@ package gl
 
 import (
 	"context"
-	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -38,6 +38,18 @@ type createAccountRequest struct {
 	Parent string      `json:"parent,omitempty"`
 }
 
+func (r createAccountRequest) Validate() error {
+	if r.Number == "" || r.Name == "" || r.Type == "" {
+		return fmt.Errorf("number, name, and type are required")
+	}
+	switch r.Type {
+	case Asset, Liability, Equity, Revenue, Expense:
+	default:
+		return fmt.Errorf("type must be asset, liability, equity, revenue, or expense")
+	}
+	return nil
+}
+
 type accountResponse struct {
 	Number    string      `json:"number"`
 	Name      string      `json:"name"`
@@ -48,13 +60,26 @@ type accountResponse struct {
 }
 
 type postEntryRequest struct {
-	Date          string             `json:"date"`
-	Description   string             `json:"description"`
-	Lines         []postEntryLine    `json:"lines"`
-	SourceType    string             `json:"source_type,omitempty"`
-	SourceRef     string             `json:"source_ref,omitempty"`
-	Kind          EntryKind          `json:"kind,omitempty"`
-	ReversesEntry string             `json:"reverses_entry,omitempty"`
+	Date          string          `json:"date"`
+	Description   string          `json:"description"`
+	Lines         []postEntryLine `json:"lines"`
+	SourceType    string          `json:"source_type,omitempty"`
+	SourceRef     string          `json:"source_ref,omitempty"`
+	Kind          EntryKind       `json:"kind,omitempty"`
+	ReversesEntry string          `json:"reverses_entry,omitempty"`
+}
+
+func (r postEntryRequest) Validate() error {
+	if r.Date == "" {
+		return fmt.Errorf("date is required")
+	}
+	if _, err := time.Parse("2006-01-02", r.Date); err != nil {
+		return fmt.Errorf("date must be YYYY-MM-DD")
+	}
+	if len(r.Lines) == 0 {
+		return fmt.Errorf("at least one line is required")
+	}
+	return nil
 }
 
 type postEntryLine struct {
@@ -96,27 +121,14 @@ type profitAndLossResponse struct {
 
 // CreateAccount handles POST /api/accounts
 func (h *Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
-	var req createAccountRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "bad request", http.StatusBadRequest)
-		return
-	}
-
-	if req.Number == "" || req.Name == "" || req.Type == "" {
-		http.Error(w, "number, name, and type are required", http.StatusBadRequest)
-		return
-	}
-
-	switch req.Type {
-	case Asset, Liability, Equity, Revenue, Expense:
-	default:
-		http.Error(w, "type must be asset, liability, equity, revenue, or expense", http.StatusBadRequest)
+	req, ok := axon.DecodeJSON[createAccountRequest](w, r)
+	if !ok {
 		return
 	}
 
 	acct, err := h.accounts.Create(r.Context(), req.Number, req.Name, req.Type, req.Parent)
 	if err != nil {
-		http.Error(w, "failed to create account", http.StatusInternalServerError)
+		axon.WriteError(w, http.StatusInternalServerError, "failed to create account")
 		return
 	}
 
@@ -134,7 +146,7 @@ func (h *Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) ListAccounts(w http.ResponseWriter, r *http.Request) {
 	accounts, err := h.accounts.List(r.Context())
 	if err != nil {
-		http.Error(w, "failed to list accounts", http.StatusInternalServerError)
+		axon.WriteError(w, http.StatusInternalServerError, "failed to list accounts")
 		return
 	}
 
@@ -157,11 +169,11 @@ func (h *Handler) GetAccount(w http.ResponseWriter, r *http.Request) {
 	number := r.PathValue("number")
 	acct, err := h.accounts.Get(r.Context(), number)
 	if err != nil {
-		http.Error(w, "failed to get account", http.StatusInternalServerError)
+		axon.WriteError(w, http.StatusInternalServerError, "failed to get account")
 		return
 	}
 	if acct == nil {
-		http.Error(w, "not found", http.StatusNotFound)
+		axon.WriteError(w, http.StatusNotFound, "not found")
 		return
 	}
 
@@ -179,7 +191,7 @@ func (h *Handler) GetAccount(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) DeactivateAccount(w http.ResponseWriter, r *http.Request) {
 	number := r.PathValue("number")
 	if err := h.accounts.Deactivate(r.Context(), number); err != nil {
-		http.Error(w, "failed to deactivate account", http.StatusInternalServerError)
+		axon.WriteError(w, http.StatusInternalServerError, "failed to deactivate account")
 		return
 	}
 	axon.WriteJSON(w, http.StatusOK, map[string]string{"status": "deactivated", "account": number})
@@ -187,17 +199,12 @@ func (h *Handler) DeactivateAccount(w http.ResponseWriter, r *http.Request) {
 
 // PostEntry handles POST /api/entries
 func (h *Handler) PostEntry(w http.ResponseWriter, r *http.Request) {
-	var req postEntryRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "bad request", http.StatusBadRequest)
+	req, ok := axon.DecodeJSON[postEntryRequest](w, r)
+	if !ok {
 		return
 	}
 
-	date, err := time.Parse("2006-01-02", req.Date)
-	if err != nil {
-		http.Error(w, "date must be YYYY-MM-DD", http.StatusBadRequest)
-		return
-	}
+	date, _ := time.Parse("2006-01-02", req.Date) // already validated
 
 	lines := make([]Line, len(req.Lines))
 	for i, l := range req.Lines {
@@ -227,7 +234,7 @@ func (h *Handler) PostEntry(w http.ResponseWriter, r *http.Request) {
 
 	entryID, err := h.ledger.Post(r.Context(), entry)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
+		axon.WriteError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
@@ -262,18 +269,18 @@ func (h *Handler) ProfitAndLoss(w http.ResponseWriter, r *http.Request) {
 	toStr := r.URL.Query().Get("to")
 
 	if fromStr == "" || toStr == "" {
-		http.Error(w, "from and to query parameters required (YYYY-MM-DD)", http.StatusBadRequest)
+		axon.WriteError(w, http.StatusBadRequest, "from and to query parameters required (YYYY-MM-DD)")
 		return
 	}
 
 	from, err := time.Parse("2006-01-02", fromStr)
 	if err != nil {
-		http.Error(w, "from must be YYYY-MM-DD", http.StatusBadRequest)
+		axon.WriteError(w, http.StatusBadRequest, "from must be YYYY-MM-DD")
 		return
 	}
 	to, err := time.Parse("2006-01-02", toStr)
 	if err != nil {
-		http.Error(w, "to must be YYYY-MM-DD", http.StatusBadRequest)
+		axon.WriteError(w, http.StatusBadRequest, "to must be YYYY-MM-DD")
 		return
 	}
 	// Include the full end date
