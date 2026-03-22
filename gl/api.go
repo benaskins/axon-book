@@ -321,7 +321,11 @@ func (h *Handler) accountTypeLookup(number string) AccountType {
 
 // RegisterRoutes registers all ledger API routes on the given mux.
 // All routes are wrapped with the provided auth middleware.
+// The root index endpoint is unauthenticated.
 func (h *Handler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.Handler) http.Handler) {
+	// Index (unauthenticated)
+	mux.HandleFunc("GET /{$}", h.Index)
+
 	// Chart of accounts
 	mux.Handle("POST /api/accounts", requireAuth(http.HandlerFunc(h.CreateAccount)))
 	mux.Handle("GET /api/accounts", requireAuth(http.HandlerFunc(h.ListAccounts)))
@@ -334,4 +338,22 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.Handl
 	// Reports
 	mux.Handle("GET /api/trial-balance", requireAuth(http.HandlerFunc(h.TrialBalance)))
 	mux.Handle("GET /api/profit-and-loss", requireAuth(http.HandlerFunc(h.ProfitAndLoss)))
+}
+
+// Index handles GET / — unauthenticated API index.
+func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
+	axon.WriteJSON(w, http.StatusOK, map[string]any{
+		"service":  "axon-book",
+		"currency": h.ledger.BaseCurrency(),
+		"endpoints": []map[string]string{
+			{"method": "GET", "path": "/health", "description": "Health check"},
+			{"method": "POST", "path": "/api/accounts", "description": "Create account"},
+			{"method": "GET", "path": "/api/accounts", "description": "List accounts"},
+			{"method": "GET", "path": "/api/accounts/{number}", "description": "Get account"},
+			{"method": "DELETE", "path": "/api/accounts/{number}", "description": "Deactivate account"},
+			{"method": "POST", "path": "/api/entries", "description": "Post journal entry"},
+			{"method": "GET", "path": "/api/trial-balance", "description": "Trial balance"},
+			{"method": "GET", "path": "/api/profit-and-loss?from=YYYY-MM-DD&to=YYYY-MM-DD", "description": "Profit and loss"},
+		},
+	})
 }
