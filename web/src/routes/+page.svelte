@@ -1,10 +1,44 @@
 <script lang="ts">
 	import EventCard from '$lib/components/EventCard.svelte';
+	import WeekSummary from '$lib/components/WeekSummary.svelte';
 	import TAccountPanel from '$lib/components/TAccountPanel.svelte';
 	import type { DomainEvent, TAccountEntry } from '$lib/types';
 	import rawEvents from '$lib/data/events.json';
 
 	const events: DomainEvent[] = rawEvents as DomainEvent[];
+
+	// Group events by ISO week, with week boundaries
+	interface Week {
+		events: { event: DomainEvent; globalIndex: number }[];
+		start: string;
+		end: string;
+	}
+
+	const weeks: Week[] = (() => {
+		const result: Week[] = [];
+		let currentWeek: Week | null = null;
+		let currentWeekKey = '';
+
+		for (let i = 0; i < events.length; i++) {
+			const date = (events[i].data.date as string) || '';
+			const d = new Date(date + 'T00:00:00');
+			// ISO week: Monday-based
+			const day = d.getDay();
+			const mondayOffset = day === 0 ? -6 : 1 - day;
+			const monday = new Date(d);
+			monday.setDate(d.getDate() + mondayOffset);
+			const weekKey = monday.toISOString().slice(0, 10);
+
+			if (weekKey !== currentWeekKey) {
+				currentWeek = { events: [], start: date, end: date };
+				currentWeekKey = weekKey;
+				result.push(currentWeek);
+			}
+			currentWeek!.events.push({ event: events[i], globalIndex: i });
+			currentWeek!.end = date;
+		}
+		return result;
+	})();
 
 	let activeEventIndex = $state(-1);
 
@@ -81,8 +115,16 @@
 
 <div class="layout">
 	<div class="events-column">
-		{#each events as event, i}
-			<EventCard {event} index={i} active={i === activeEventIndex} />
+		{#each weeks as week, wi}
+			{#each week.events as { event, globalIndex }}
+				<EventCard {event} index={globalIndex} active={globalIndex === activeEventIndex} />
+			{/each}
+			<WeekSummary
+				events={week.events.map(e => e.event)}
+				weekNumber={wi}
+				weekStart={week.start}
+				weekEnd={week.end}
+			/>
 		{/each}
 		<div class="end-marker">
 			<p>30 days. {events.length} events. Every dollar accounted for.</p>
