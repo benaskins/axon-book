@@ -8,8 +8,8 @@ build: web
     go build -ldflags "-X main.version={{version}}" -o bin/axon-book ./example/
 
 install: build
-    cp bin/axon-book ~/.local/bin/axon-book
-    @echo "Installed axon-book {{version}}"
+    cp bin/axon-book ${AURELIA_ROOT}/bin/book
+    @echo "Installed book {{version}}"
 
 test:
     go vet ./...
