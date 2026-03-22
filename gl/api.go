@@ -372,7 +372,7 @@ func (h *Handler) MonthlySummaries(w http.ResponseWriter, r *http.Request) {
 // The root index endpoint is unauthenticated.
 func (h *Handler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.Handler) http.Handler) {
 	// Index (unauthenticated)
-	mux.HandleFunc("GET /{$}", h.Index)
+	mux.HandleFunc("GET /api/{$}", h.Index)
 
 	// Chart of accounts
 	mux.Handle("POST /api/accounts", requireAuth(http.HandlerFunc(h.CreateAccount)))
