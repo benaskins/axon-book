@@ -96,8 +96,7 @@ func run() error {
 	handler := gl.NewHandler(ledger, accounts, projection)
 	handler.RegisterRoutes(mux, requireAuth)
 
-	addr := ":" + port
-	slog.Info("serving", "addr", addr, "auth_url", authURL)
-	axon.ListenAndServe(addr, axon.StandardMiddleware(mux))
+	slog.Info("serving", "port", port, "auth_url", authURL)
+	axon.ListenAndServe(port, axon.StandardMiddleware(mux))
 	return nil
 }
