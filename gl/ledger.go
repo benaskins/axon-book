@@ -41,6 +41,13 @@ func (l *Ledger) BaseCurrency() string {
 // It enforces: at least two lines, all accounts exist and are active,
 // and total base-currency debits equal total base-currency credits.
 func (l *Ledger) Post(ctx context.Context, entry JournalEntryPosted) (string, error) {
+	return l.PostWithMetadata(ctx, entry, nil)
+}
+
+// PostWithMetadata is like Post but attaches metadata to the event.
+// Use this to link journal entries to their causing domain events
+// via a causation_id.
+func (l *Ledger) PostWithMetadata(ctx context.Context, entry JournalEntryPosted, metadata map[string]string) (string, error) {
 	if len(entry.Lines) < 2 {
 		return "", fmt.Errorf("journal entry must have at least two lines")
 	}
@@ -87,12 +94,13 @@ func (l *Ledger) Post(ctx context.Context, entry JournalEntryPosted) (string, er
 	}
 
 	event := fact.Event{
-		ID:   uuid.New().String(),
-		Type: EventJournalEntryPosted,
-		Data: data,
+		ID:       uuid.New().String(),
+		Type:     EventJournalEntryPosted,
+		Data:     data,
+		Metadata: metadata,
 	}
 
-	if err := l.events.Append(ctx, "ledger", []fact.Event{event}); err != nil {
+	if err := l.events.Append(ctx, StreamLedger, []fact.Event{event}); err != nil {
 		return "", fmt.Errorf("append journal entry: %w", err)
 	}
 
