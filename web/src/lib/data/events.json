@@ -1,0 +1,3200 @@
+[
+  {
+    "id": "d6de6360-bc67-4fa8-98bb-9b748bda7612",
+    "type": "investment.made",
+    "data": {
+      "date": "2025-01-01",
+      "amount": "5000",
+      "description": "Owner's initial investment"
+    },
+    "sequence": 1,
+    "occurred_at": "2026-03-22T22:59:20.317594+11:00",
+    "journal_entry": {
+      "date": "2025-01-01T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "5000",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "5000",
+          "account": "3000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "ec12ac2b-6eca-449d-ba72-3b4fc78891d5",
+      "description": "Owner's initial investment"
+    }
+  },
+  {
+    "id": "69b291af-0155-453c-8cf3-7008edb121d8",
+    "type": "permit.paid",
+    "data": {
+      "date": "2025-03-01",
+      "amount": "50",
+      "description": "Stand permit - March"
+    },
+    "sequence": 2,
+    "occurred_at": "2026-03-22T22:59:20.33106+11:00",
+    "journal_entry": {
+      "date": "2025-03-01T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "50",
+          "credit": "0",
+          "account": "5500",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "50",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "3d4eab85-784b-4bea-9e5c-a6264895f095",
+      "description": "Stand permit - March"
+    }
+  },
+  {
+    "id": "e4dfc205-af87-403d-8396-7d0cc0b68c74",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "11",
+      "date": "2025-03-01"
+    },
+    "sequence": 3,
+    "occurred_at": "2026-03-22T22:59:20.342499+11:00",
+    "journal_entry": {
+      "date": "2025-03-01T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "11",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "11",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "c421a62d-b9d1-454a-aea1-6dfaadfde05e",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "43466982-9707-4e49-8992-af032735c139",
+    "type": "sale.completed",
+    "data": {
+      "cups": 4,
+      "date": "2025-03-01",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 4,
+    "occurred_at": "2026-03-22T22:59:20.346277+11:00",
+    "journal_entry": {
+      "date": "2025-03-01T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "acf2fbda-f33b-4507-932f-860072f0caa5",
+      "description": "Lemonade sales - 4 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "17fffc19-c4f2-4569-81b0-889ad1122e4b",
+    "type": "spoilage.recorded",
+    "data": {
+      "date": "2025-03-02",
+      "item": "ice",
+      "amount": "10",
+      "reason": "rain",
+      "account": "1400"
+    },
+    "sequence": 5,
+    "occurred_at": "2026-03-22T22:59:20.351108+11:00",
+    "journal_entry": {
+      "date": "2025-03-02T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "10",
+          "credit": "0",
+          "account": "5600",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "10",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "53ce4617-fa95-493b-aed6-c608e06cc698",
+      "description": "Spoilage - ice (rain)"
+    }
+  },
+  {
+    "id": "c052b865-1eb9-4d93-92c6-4cc74437cb6d",
+    "type": "supply.purchased",
+    "data": {
+      "ref": "po-20250303",
+      "date": "2025-03-03",
+      "items": [
+        {
+          "cost": "15",
+          "name": "Lemons",
+          "account": "1100",
+          "quantity": 15
+        },
+        {
+          "cost": "7",
+          "name": "Sugar",
+          "account": "1200",
+          "quantity": 7
+        },
+        {
+          "cost": "5",
+          "name": "Cups",
+          "account": "1300",
+          "quantity": 50
+        }
+      ]
+    },
+    "sequence": 6,
+    "occurred_at": "2026-03-22T22:59:20.353729+11:00",
+    "journal_entry": {
+      "date": "2025-03-03T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "15",
+          "credit": "0",
+          "account": "1100",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "7",
+          "credit": "0",
+          "account": "1200",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5",
+          "credit": "0",
+          "account": "1300",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "27",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "babd86c1-69ce-452c-b5f2-08d678b22a14",
+      "source_ref": "po-20250303",
+      "description": "Weekly supply run",
+      "source_type": "purchase_order"
+    }
+  },
+  {
+    "id": "4219d9d1-0df2-4032-bf71-84e80530569c",
+    "type": "spoilage.recorded",
+    "data": {
+      "date": "2025-03-03",
+      "item": "ice",
+      "amount": "9",
+      "reason": "rain",
+      "account": "1400"
+    },
+    "sequence": 7,
+    "occurred_at": "2026-03-22T22:59:20.357359+11:00",
+    "journal_entry": {
+      "date": "2025-03-03T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "9",
+          "credit": "0",
+          "account": "5600",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "9",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "5ff33bb6-f102-471d-a1c0-120e31af5c1b",
+      "description": "Spoilage - ice (rain)"
+    }
+  },
+  {
+    "id": "27a9ab6e-cc70-4565-81a8-d23658788ec6",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "14",
+      "date": "2025-03-06"
+    },
+    "sequence": 8,
+    "occurred_at": "2026-03-22T22:59:20.359797+11:00",
+    "journal_entry": {
+      "date": "2025-03-06T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "14",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "14",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "bb0cde14-a8bd-484a-b379-b6093281af8b",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "0960f356-bca6-4b5b-bf58-b2bb8788252f",
+    "type": "sale.completed",
+    "data": {
+      "cups": 8,
+      "date": "2025-03-06",
+      "weather": "mild",
+      "price_per_cup": "2.5"
+    },
+    "sequence": 9,
+    "occurred_at": "2026-03-22T22:59:20.36198+11:00",
+    "journal_entry": {
+      "date": "2025-03-06T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "20",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "20",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "4",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.6",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2.4",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "4",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.6",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2.4",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "a3b107e9-a53f-475a-a52d-e9752c2cda4d",
+      "description": "Lemonade sales - 8 cups @ $2.50 (mild)"
+    }
+  },
+  {
+    "id": "bf9b3e53-9417-4b9e-9f55-207120f554e9",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "9",
+      "date": "2025-03-07"
+    },
+    "sequence": 10,
+    "occurred_at": "2026-03-22T22:59:20.368171+11:00",
+    "journal_entry": {
+      "date": "2025-03-07T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "9",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "9",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "3e3a5ef1-83b9-4bcf-8e8c-3c44a0704881",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "05f4e8e3-1be7-4cd5-aaf9-2450cb582424",
+    "type": "sale.completed",
+    "data": {
+      "cups": 4,
+      "date": "2025-03-07",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 11,
+    "occurred_at": "2026-03-22T22:59:20.370133+11:00",
+    "journal_entry": {
+      "date": "2025-03-07T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "c9d2006b-d3bf-4baa-a7e2-0a8ef4ae253d",
+      "description": "Lemonade sales - 4 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "9c8a7576-ee89-42f2-9af4-bb6a64761cba",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "11",
+      "date": "2025-03-08"
+    },
+    "sequence": 12,
+    "occurred_at": "2026-03-22T22:59:20.373691+11:00",
+    "journal_entry": {
+      "date": "2025-03-08T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "11",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "11",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "6a3c8839-afbf-4822-882c-8ffae04bf436",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "ce65aafd-9203-4245-87f4-6a82536ae707",
+    "type": "sale.completed",
+    "data": {
+      "cups": 12,
+      "date": "2025-03-08",
+      "weather": "mild",
+      "price_per_cup": "2.5"
+    },
+    "sequence": 13,
+    "occurred_at": "2026-03-22T22:59:20.375583+11:00",
+    "journal_entry": {
+      "date": "2025-03-08T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "30",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "30",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "6",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2.4",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "3.6",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "6",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2.4",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "3.6",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "8c0b1515-5cca-4155-8a49-9d997ac77c83",
+      "description": "Lemonade sales - 12 cups @ $2.50 (mild)"
+    }
+  },
+  {
+    "id": "230f6ef7-2eba-47ad-b205-4d6d4825768e",
+    "type": "spoilage.recorded",
+    "data": {
+      "date": "2025-03-09",
+      "item": "ice",
+      "amount": "9",
+      "reason": "rain",
+      "account": "1400"
+    },
+    "sequence": 14,
+    "occurred_at": "2026-03-22T22:59:20.378786+11:00",
+    "journal_entry": {
+      "date": "2025-03-09T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "9",
+          "credit": "0",
+          "account": "5600",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "9",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "68a9d542-a2a9-4531-81aa-6c3e830b8c42",
+      "description": "Spoilage - ice (rain)"
+    }
+  },
+  {
+    "id": "3cf23249-e900-4b4d-8179-690b70057401",
+    "type": "supply.purchased",
+    "data": {
+      "ref": "po-20250310",
+      "date": "2025-03-10",
+      "items": [
+        {
+          "cost": "15",
+          "name": "Lemons",
+          "account": "1100",
+          "quantity": 15
+        },
+        {
+          "cost": "7",
+          "name": "Sugar",
+          "account": "1200",
+          "quantity": 7
+        },
+        {
+          "cost": "5",
+          "name": "Cups",
+          "account": "1300",
+          "quantity": 50
+        }
+      ]
+    },
+    "sequence": 15,
+    "occurred_at": "2026-03-22T22:59:20.380427+11:00",
+    "journal_entry": {
+      "date": "2025-03-10T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "15",
+          "credit": "0",
+          "account": "1100",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "7",
+          "credit": "0",
+          "account": "1200",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5",
+          "credit": "0",
+          "account": "1300",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "27",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "0bd052a2-5e5e-4236-a727-61d6d748c1c2",
+      "source_ref": "po-20250310",
+      "description": "Weekly supply run",
+      "source_type": "purchase_order"
+    }
+  },
+  {
+    "id": "eaed9d07-16a9-4825-a3f8-ec9e9ad38231",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "14",
+      "date": "2025-03-10"
+    },
+    "sequence": 16,
+    "occurred_at": "2026-03-22T22:59:20.382456+11:00",
+    "journal_entry": {
+      "date": "2025-03-10T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "14",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "14",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "d2ad2f59-b7bb-4208-8652-9c33dad1fcac",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "c8974796-0079-4206-ad0e-2ca8b73d1b92",
+    "type": "sale.completed",
+    "data": {
+      "cups": 10,
+      "date": "2025-03-10",
+      "weather": "mild",
+      "price_per_cup": "2.5"
+    },
+    "sequence": 17,
+    "occurred_at": "2026-03-22T22:59:20.384556+11:00",
+    "journal_entry": {
+      "date": "2025-03-10T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "25",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "25",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "3",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "3",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "885d01b2-ab2f-4974-b77b-9ce0f304a256",
+      "description": "Lemonade sales - 10 cups @ $2.50 (mild)"
+    }
+  },
+  {
+    "id": "e55b264d-ee36-404b-a3c0-499f8006d188",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "12",
+      "date": "2025-03-13"
+    },
+    "sequence": 18,
+    "occurred_at": "2026-03-22T22:59:20.387797+11:00",
+    "journal_entry": {
+      "date": "2025-03-13T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "12",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "12",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "2c11fa67-1b8d-4247-aa11-592580e18f54",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "c99c75e7-96f8-4b13-8b53-814945b90ca6",
+    "type": "sale.completed",
+    "data": {
+      "cups": 5,
+      "date": "2025-03-13",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 19,
+    "occurred_at": "2026-03-22T22:59:20.389808+11:00",
+    "journal_entry": {
+      "date": "2025-03-13T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "10",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "10",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2.5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.5",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.5",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2.5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.5",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.5",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "fa0976ee-7258-40c7-ae41-577f46da3908",
+      "description": "Lemonade sales - 5 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "4864212a-b6c2-4690-962d-1f0990456812",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "13",
+      "date": "2025-03-14"
+    },
+    "sequence": 20,
+    "occurred_at": "2026-03-22T22:59:20.392765+11:00",
+    "journal_entry": {
+      "date": "2025-03-14T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "13",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "13",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "5e3e03d4-95d1-4cd3-82ab-3345eed011a4",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "b1dfe2b0-b0c6-44c2-9f57-3f53187c560f",
+    "type": "sale.completed",
+    "data": {
+      "cups": 3,
+      "date": "2025-03-14",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 21,
+    "occurred_at": "2026-03-22T22:59:20.394445+11:00",
+    "journal_entry": {
+      "date": "2025-03-14T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "6",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "6",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.6",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.3",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.9",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.6",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.3",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.9",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "f782f181-0803-4143-be11-25365bd899ce",
+      "description": "Lemonade sales - 3 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "dc67fd14-2948-4c1e-a87c-32e58c1276ab",
+    "type": "spoilage.recorded",
+    "data": {
+      "date": "2025-03-14",
+      "item": "lemons",
+      "amount": "24",
+      "reason": "overripe",
+      "account": "1100"
+    },
+    "sequence": 22,
+    "occurred_at": "2026-03-22T22:59:20.398754+11:00",
+    "journal_entry": {
+      "date": "2025-03-14T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "24",
+          "credit": "0",
+          "account": "5600",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "24",
+          "account": "1100",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "0f5a4c68-f647-4590-a327-fefb2ca8705b",
+      "description": "Spoilage - lemons (overripe)"
+    }
+  },
+  {
+    "id": "689050a9-d322-40b1-8a17-9604d9ec41b8",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "14",
+      "date": "2025-03-15"
+    },
+    "sequence": 23,
+    "occurred_at": "2026-03-22T22:59:20.400609+11:00",
+    "journal_entry": {
+      "date": "2025-03-15T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "14",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "14",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "0b8a92cb-721e-4e2b-a02c-cb9f4cd331b2",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "6ce3020e-474d-419c-aaeb-cfe77318f3c5",
+    "type": "sale.completed",
+    "data": {
+      "cups": 6,
+      "date": "2025-03-15",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 24,
+    "occurred_at": "2026-03-22T22:59:20.402141+11:00",
+    "journal_entry": {
+      "date": "2025-03-15T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "12",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "12",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "3",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.6",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.8",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "3",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.6",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.8",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "01b73f2f-8874-4723-bddb-5b3e372acb6f",
+      "description": "Lemonade sales - 6 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "aff87ea5-1968-44a6-9fdb-ecaf1c96a34c",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "9",
+      "date": "2025-03-16"
+    },
+    "sequence": 25,
+    "occurred_at": "2026-03-22T22:59:20.404729+11:00",
+    "journal_entry": {
+      "date": "2025-03-16T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "9",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "9",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "47d8e030-c252-44a0-89d7-bfcb2913c738",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "c8b1b6e4-bf29-4da7-a71a-cd776d2ad814",
+    "type": "sale.completed",
+    "data": {
+      "cups": 4,
+      "date": "2025-03-16",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 26,
+    "occurred_at": "2026-03-22T22:59:20.405913+11:00",
+    "journal_entry": {
+      "date": "2025-03-16T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "79e5ea2b-2de0-417e-b7fd-ab64f8755e07",
+      "description": "Lemonade sales - 4 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "dedcf26e-1930-4f57-a226-c4c4d3bcb3c3",
+    "type": "supply.purchased",
+    "data": {
+      "ref": "po-20250317",
+      "date": "2025-03-17",
+      "items": [
+        {
+          "cost": "15",
+          "name": "Lemons",
+          "account": "1100",
+          "quantity": 15
+        },
+        {
+          "cost": "7",
+          "name": "Sugar",
+          "account": "1200",
+          "quantity": 7
+        },
+        {
+          "cost": "5",
+          "name": "Cups",
+          "account": "1300",
+          "quantity": 50
+        }
+      ]
+    },
+    "sequence": 27,
+    "occurred_at": "2026-03-22T22:59:20.409473+11:00",
+    "journal_entry": {
+      "date": "2025-03-17T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "15",
+          "credit": "0",
+          "account": "1100",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "7",
+          "credit": "0",
+          "account": "1200",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5",
+          "credit": "0",
+          "account": "1300",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "27",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "7cc12c98-04c3-4714-8a9f-c0d52ddcf6e3",
+      "source_ref": "po-20250317",
+      "description": "Weekly supply run",
+      "source_type": "purchase_order"
+    }
+  },
+  {
+    "id": "47919ecb-b308-4539-8cfd-11c0c068459b",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "9",
+      "date": "2025-03-17"
+    },
+    "sequence": 28,
+    "occurred_at": "2026-03-22T22:59:20.410861+11:00",
+    "journal_entry": {
+      "date": "2025-03-17T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "9",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "9",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "105098f0-2243-4d46-b4ef-c08474d418a0",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "0edb53ad-60c6-4397-b8b3-df13c8453c1e",
+    "type": "sale.completed",
+    "data": {
+      "cups": 4,
+      "date": "2025-03-17",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 29,
+    "occurred_at": "2026-03-22T22:59:20.411998+11:00",
+    "journal_entry": {
+      "date": "2025-03-17T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "bf83ee81-6284-4121-8fac-b0b97c31c3cf",
+      "description": "Lemonade sales - 4 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "d22f240c-fe02-46d7-9326-a96872ff950e",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "11",
+      "date": "2025-03-18"
+    },
+    "sequence": 30,
+    "occurred_at": "2026-03-22T22:59:20.414359+11:00",
+    "journal_entry": {
+      "date": "2025-03-18T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "11",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "11",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "c251f4ad-e793-4bec-ab7f-dce50dfa35f8",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "c8bb4a3f-54ae-438b-b05a-6a65b5e63cfb",
+    "type": "sale.completed",
+    "data": {
+      "cups": 2,
+      "date": "2025-03-18",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 31,
+    "occurred_at": "2026-03-22T22:59:20.415535+11:00",
+    "journal_entry": {
+      "date": "2025-03-18T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "4",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "4",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.2",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.6",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.2",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.6",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "91b41993-294f-4bd8-a9b2-9559435e5244",
+      "description": "Lemonade sales - 2 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "5f9b8675-9ae4-4d45-ba20-cf1145051530",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "12",
+      "date": "2025-03-19"
+    },
+    "sequence": 32,
+    "occurred_at": "2026-03-22T22:59:20.419099+11:00",
+    "journal_entry": {
+      "date": "2025-03-19T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "12",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "12",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "05e48983-8709-40e8-bb52-981cce72204b",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "92f2075a-60e5-494f-bc9c-54f1062c0ec8",
+    "type": "sale.completed",
+    "data": {
+      "cups": 3,
+      "date": "2025-03-19",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 33,
+    "occurred_at": "2026-03-22T22:59:20.42017+11:00",
+    "journal_entry": {
+      "date": "2025-03-19T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "6",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "6",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.6",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.3",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.9",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.6",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.3",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.9",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "85e7a2db-31e7-420c-991a-517d03d41f81",
+      "description": "Lemonade sales - 3 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "7f11b6ea-c506-4132-b6c9-a36adae482bb",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "14",
+      "date": "2025-03-20"
+    },
+    "sequence": 34,
+    "occurred_at": "2026-03-22T22:59:20.422117+11:00",
+    "journal_entry": {
+      "date": "2025-03-20T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "14",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "14",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "8deecb3b-0855-4170-b4e9-9a36afacd6c6",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "15db436b-5345-48ff-8e58-ee6ab941328d",
+    "type": "sale.completed",
+    "data": {
+      "cups": 4,
+      "date": "2025-03-20",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 35,
+    "occurred_at": "2026-03-22T22:59:20.423274+11:00",
+    "journal_entry": {
+      "date": "2025-03-20T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "fe4b5189-b45f-4eeb-b7ec-f6e28275d5b7",
+      "description": "Lemonade sales - 4 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "be764c29-0edf-440f-a401-de31a3133794",
+    "type": "spoilage.recorded",
+    "data": {
+      "date": "2025-03-22",
+      "item": "ice",
+      "amount": "11",
+      "reason": "rain",
+      "account": "1400"
+    },
+    "sequence": 36,
+    "occurred_at": "2026-03-22T22:59:20.425317+11:00",
+    "journal_entry": {
+      "date": "2025-03-22T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "11",
+          "credit": "0",
+          "account": "5600",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "11",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "11046464-10a7-4300-bc85-6c3a0a38add6",
+      "description": "Spoilage - ice (rain)"
+    }
+  },
+  {
+    "id": "f32523ba-a7be-49c0-aee5-4e7761b10328",
+    "type": "spoilage.recorded",
+    "data": {
+      "date": "2025-03-23",
+      "item": "ice",
+      "amount": "17",
+      "reason": "rain",
+      "account": "1400"
+    },
+    "sequence": 37,
+    "occurred_at": "2026-03-22T22:59:20.42642+11:00",
+    "journal_entry": {
+      "date": "2025-03-23T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "17",
+          "credit": "0",
+          "account": "5600",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "17",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "4f12ee0b-cb35-4dab-b0f7-5fa5e4f4a252",
+      "description": "Spoilage - ice (rain)"
+    }
+  },
+  {
+    "id": "29b2ac23-8df2-4b0a-9d53-1e6059c41fab",
+    "type": "supply.purchased",
+    "data": {
+      "ref": "po-20250324",
+      "date": "2025-03-24",
+      "items": [
+        {
+          "cost": "15",
+          "name": "Lemons",
+          "account": "1100",
+          "quantity": 15
+        },
+        {
+          "cost": "7",
+          "name": "Sugar",
+          "account": "1200",
+          "quantity": 7
+        },
+        {
+          "cost": "5",
+          "name": "Cups",
+          "account": "1300",
+          "quantity": 50
+        }
+      ]
+    },
+    "sequence": 38,
+    "occurred_at": "2026-03-22T22:59:20.427522+11:00",
+    "journal_entry": {
+      "date": "2025-03-24T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "15",
+          "credit": "0",
+          "account": "1100",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "7",
+          "credit": "0",
+          "account": "1200",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5",
+          "credit": "0",
+          "account": "1300",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "27",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "0dc4910c-217a-42a6-b8bf-1e453f53901b",
+      "source_ref": "po-20250324",
+      "description": "Weekly supply run",
+      "source_type": "purchase_order"
+    }
+  },
+  {
+    "id": "ab0bd10f-161c-4c04-902c-b5fda73db12b",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "12",
+      "date": "2025-03-24"
+    },
+    "sequence": 39,
+    "occurred_at": "2026-03-22T22:59:20.428831+11:00",
+    "journal_entry": {
+      "date": "2025-03-24T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "12",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "12",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "0bd151a6-f0fd-45e2-9106-850dcc484b46",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "3d7816e5-5045-4c86-aff0-e3dd77a41fef",
+    "type": "sale.completed",
+    "data": {
+      "cups": 4,
+      "date": "2025-03-24",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 40,
+    "occurred_at": "2026-03-22T22:59:20.429876+11:00",
+    "journal_entry": {
+      "date": "2025-03-24T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "f70450c5-9540-447e-89c9-2de496ca705b",
+      "description": "Lemonade sales - 4 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "ad3eddbe-99c0-456d-9ac7-e2eb9838ff64",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "12",
+      "date": "2025-03-25"
+    },
+    "sequence": 41,
+    "occurred_at": "2026-03-22T22:59:20.4319+11:00",
+    "journal_entry": {
+      "date": "2025-03-25T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "12",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "12",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "b86128b5-f935-466e-9228-f9ccdbc5b5a3",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "9f1203b2-7a3b-4854-8211-bbed545060c7",
+    "type": "sale.completed",
+    "data": {
+      "cups": 4,
+      "date": "2025-03-25",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 42,
+    "occurred_at": "2026-03-22T22:59:20.433049+11:00",
+    "journal_entry": {
+      "date": "2025-03-25T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "6c8cbfe3-8d4a-4e19-b680-0fbaa690d7f8",
+      "description": "Lemonade sales - 4 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "e40c3e08-a135-49b8-9c30-f2fceedeef15",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "12",
+      "date": "2025-03-27"
+    },
+    "sequence": 43,
+    "occurred_at": "2026-03-22T22:59:20.435116+11:00",
+    "journal_entry": {
+      "date": "2025-03-27T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "12",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "12",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "677541b7-34c4-4270-a660-442a21effbf3",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "e9915b2a-a256-4f7f-a5c5-9555cc7b1c5f",
+    "type": "sale.completed",
+    "data": {
+      "cups": 12,
+      "date": "2025-03-27",
+      "weather": "mild",
+      "price_per_cup": "2.5"
+    },
+    "sequence": 44,
+    "occurred_at": "2026-03-22T22:59:20.43639+11:00",
+    "journal_entry": {
+      "date": "2025-03-27T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "30",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "30",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "6",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2.4",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.2",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "3.6",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "6",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2.4",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.2",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "3.6",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "1eab9458-d748-4c81-9ef9-02102a8318b9",
+      "description": "Lemonade sales - 12 cups @ $2.50 (mild)"
+    }
+  },
+  {
+    "id": "16174fa4-e838-40be-b587-a78c31dea234",
+    "type": "spoilage.recorded",
+    "data": {
+      "date": "2025-03-29",
+      "item": "ice",
+      "amount": "10",
+      "reason": "rain",
+      "account": "1400"
+    },
+    "sequence": 45,
+    "occurred_at": "2026-03-22T22:59:20.438448+11:00",
+    "journal_entry": {
+      "date": "2025-03-29T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "10",
+          "credit": "0",
+          "account": "5600",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "10",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "ae0d5361-4442-463a-be6e-9f876b1ecdde",
+      "description": "Spoilage - ice (rain)"
+    }
+  },
+  {
+    "id": "713e7a9a-bb7d-4381-8ce1-4ddbddc8123b",
+    "type": "supply.purchased",
+    "data": {
+      "ref": "po-20250331",
+      "date": "2025-03-31",
+      "items": [
+        {
+          "cost": "15",
+          "name": "Lemons",
+          "account": "1100",
+          "quantity": 15
+        },
+        {
+          "cost": "7",
+          "name": "Sugar",
+          "account": "1200",
+          "quantity": 7
+        },
+        {
+          "cost": "5",
+          "name": "Cups",
+          "account": "1300",
+          "quantity": 50
+        }
+      ]
+    },
+    "sequence": 46,
+    "occurred_at": "2026-03-22T22:59:20.440406+11:00",
+    "journal_entry": {
+      "date": "2025-03-31T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "15",
+          "credit": "0",
+          "account": "1100",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "7",
+          "credit": "0",
+          "account": "1200",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5",
+          "credit": "0",
+          "account": "1300",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "27",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "b7c8f0e1-46cf-4598-9606-45fef78ca3ca",
+      "source_ref": "po-20250331",
+      "description": "Weekly supply run",
+      "source_type": "purchase_order"
+    }
+  },
+  {
+    "id": "829df956-9097-45c5-9c92-9a7f1b33d1c9",
+    "type": "permit.paid",
+    "data": {
+      "date": "2025-04-01",
+      "amount": "50",
+      "description": "Stand permit - April"
+    },
+    "sequence": 47,
+    "occurred_at": "2026-03-22T22:59:20.441754+11:00",
+    "journal_entry": {
+      "date": "2025-04-01T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "50",
+          "credit": "0",
+          "account": "5500",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "50",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "468d597d-d572-4816-ac1b-e56700f0b87a",
+      "description": "Stand permit - April"
+    }
+  },
+  {
+    "id": "470df570-bba4-42b2-9946-b116ae34be22",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "11",
+      "date": "2025-04-01"
+    },
+    "sequence": 48,
+    "occurred_at": "2026-03-22T22:59:20.442871+11:00",
+    "journal_entry": {
+      "date": "2025-04-01T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "11",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "11",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "f5f6dec3-7cb6-4a6f-bf45-0953a0c72e69",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "5b9e761a-6f7b-45a0-90ac-41c3ba9b6407",
+    "type": "sale.completed",
+    "data": {
+      "cups": 20,
+      "date": "2025-04-01",
+      "weather": "mild",
+      "price_per_cup": "2.5"
+    },
+    "sequence": 49,
+    "occurred_at": "2026-03-22T22:59:20.445041+11:00",
+    "journal_entry": {
+      "date": "2025-04-01T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "50",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "50",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "10",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "4",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "6",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "10",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "4",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "6",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "562764c8-e063-4209-bd78-a4b170b99765",
+      "description": "Lemonade sales - 20 cups @ $2.50 (mild)"
+    }
+  },
+  {
+    "id": "d26aa6b8-7561-46cb-903e-f5acc0a868d4",
+    "type": "advertising.purchased",
+    "data": {
+      "date": "2025-04-02",
+      "amount": "21",
+      "description": "Advertising - signs and flyers"
+    },
+    "sequence": 50,
+    "occurred_at": "2026-03-22T22:59:20.447345+11:00",
+    "journal_entry": {
+      "date": "2025-04-02T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "21",
+          "credit": "0",
+          "account": "5400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "21",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "87d8290b-4574-4b8d-8ae2-e22f7300afb0",
+      "description": "Advertising - signs and flyers"
+    }
+  },
+  {
+    "id": "bd5722c6-5619-48e8-8748-033ea4c1affc",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "21",
+      "date": "2025-04-02"
+    },
+    "sequence": 51,
+    "occurred_at": "2026-03-22T22:59:20.448522+11:00",
+    "journal_entry": {
+      "date": "2025-04-02T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "21",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "21",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "10fd47c6-cd22-473d-8921-d70384d7af02",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "0059e69f-0b73-4adb-86f8-7774c213b8f2",
+    "type": "sale.completed",
+    "data": {
+      "cups": 25,
+      "date": "2025-04-02",
+      "weather": "hot",
+      "price_per_cup": "3.5"
+    },
+    "sequence": 52,
+    "occurred_at": "2026-03-22T22:59:20.449688+11:00",
+    "journal_entry": {
+      "date": "2025-04-02T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "87.5",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "87.5",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "12.5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2.5",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "7.5",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "12.5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "5",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2.5",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "7.5",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "b7b5254b-c09c-4586-bc51-0abbf19d9431",
+      "description": "Lemonade sales - 25 cups @ $3.50 (hot)"
+    }
+  },
+  {
+    "id": "e714b4c4-c841-4e69-a4f6-a1a9e4baf95d",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "14",
+      "date": "2025-04-03"
+    },
+    "sequence": 53,
+    "occurred_at": "2026-03-22T22:59:20.451754+11:00",
+    "journal_entry": {
+      "date": "2025-04-03T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "14",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "14",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "1699da91-4fb0-472c-8696-c60a29e4ad44",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "373aa2f8-92e6-49ca-8d6e-0b58457d5130",
+    "type": "sale.completed",
+    "data": {
+      "cups": 7,
+      "date": "2025-04-03",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 54,
+    "occurred_at": "2026-03-22T22:59:20.452831+11:00",
+    "journal_entry": {
+      "date": "2025-04-03T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "14",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "14",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "3.5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.4",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0.7",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2.1",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "3.5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.4",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "0.7",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2.1",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "7aa6117f-ea18-4cf5-8cc8-5a4d129ef392",
+      "description": "Lemonade sales - 7 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "95b1927c-c338-44d7-a926-920fdf3ddb10",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "11",
+      "date": "2025-04-04"
+    },
+    "sequence": 55,
+    "occurred_at": "2026-03-22T22:59:20.455476+11:00",
+    "journal_entry": {
+      "date": "2025-04-04T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "11",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "11",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "4e25748c-9513-4792-8068-9e3b0128a07b",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "222923b0-455b-4f86-9c54-62946d2684a5",
+    "type": "sale.completed",
+    "data": {
+      "cups": 17,
+      "date": "2025-04-04",
+      "weather": "mild",
+      "price_per_cup": "2.5"
+    },
+    "sequence": 56,
+    "occurred_at": "2026-03-22T22:59:20.45664+11:00",
+    "journal_entry": {
+      "date": "2025-04-04T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "42.5",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "42.5",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "8.5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "3.4",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.7",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "5.1",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8.5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "3.4",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.7",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "5.1",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "c81a30c2-ff33-40a5-b18b-0c47a07fec89",
+      "description": "Lemonade sales - 17 cups @ $2.50 (mild)"
+    }
+  },
+  {
+    "id": "eba2df18-968a-4df9-9cc3-f18f72b9dbfc",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "8",
+      "date": "2025-04-05"
+    },
+    "sequence": 57,
+    "occurred_at": "2026-03-22T22:59:20.458684+11:00",
+    "journal_entry": {
+      "date": "2025-04-05T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "8b6d73ee-df07-4942-8169-d89ef5e64b11",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "2543ddf7-af28-42be-b54c-a6b4c245b1b4",
+    "type": "sale.completed",
+    "data": {
+      "cups": 14,
+      "date": "2025-04-05",
+      "weather": "cold",
+      "price_per_cup": "2"
+    },
+    "sequence": 58,
+    "occurred_at": "2026-03-22T22:59:20.459839+11:00",
+    "journal_entry": {
+      "date": "2025-04-05T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "28",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "28",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "7",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "2.8",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "1.4",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "4.2",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "7",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "2.8",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "1.4",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "4.2",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "5f92297b-b555-48f7-9857-a2e8c8e59363",
+      "description": "Lemonade sales - 14 cups @ $2.00 (cold)"
+    }
+  },
+  {
+    "id": "6524f11e-ffca-4ee6-b81f-bdb525d451fe",
+    "type": "ice.purchased",
+    "data": {
+      "cost": "8",
+      "date": "2025-04-06"
+    },
+    "sequence": 59,
+    "occurred_at": "2026-03-22T22:59:20.46184+11:00",
+    "journal_entry": {
+      "date": "2025-04-06T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "8",
+          "credit": "0",
+          "account": "1400",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "8",
+          "account": "1000",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "c9560ff8-3942-46eb-8f8b-1e71d8a671aa",
+      "description": "Daily ice purchase"
+    }
+  },
+  {
+    "id": "e00fa4e9-bde4-4df9-9350-e3f437c6d5b7",
+    "type": "sale.completed",
+    "data": {
+      "cups": 31,
+      "date": "2025-04-06",
+      "weather": "mild",
+      "price_per_cup": "2.5"
+    },
+    "sequence": 60,
+    "occurred_at": "2026-03-22T22:59:20.4629+11:00",
+    "journal_entry": {
+      "date": "2025-04-06T00:00:00Z",
+      "kind": "operating",
+      "lines": [
+        {
+          "debit": "77.5",
+          "credit": "0",
+          "account": "1000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "77.5",
+          "account": "4000",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "15.5",
+          "credit": "0",
+          "account": "5000",
+          "description": "Lemons",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "6.2",
+          "credit": "0",
+          "account": "5100",
+          "description": "Sugar",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "3.1",
+          "credit": "0",
+          "account": "5200",
+          "description": "Cups",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "9.3",
+          "credit": "0",
+          "account": "5300",
+          "description": "Ice",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "15.5",
+          "account": "1100",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "6.2",
+          "account": "1200",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "3.1",
+          "account": "1300",
+          "exchange_rate": "0"
+        },
+        {
+          "debit": "0",
+          "credit": "9.3",
+          "account": "1400",
+          "exchange_rate": "0"
+        }
+      ],
+      "entry_id": "37a4776d-6768-45f7-ba63-133a1a26e42a",
+      "description": "Lemonade sales - 31 cups @ $2.50 (mild)"
+    }
+  }
+]
