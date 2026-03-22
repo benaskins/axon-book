@@ -23,6 +23,7 @@ import (
 	"os"
 
 	"github.com/benaskins/axon"
+	book "github.com/benaskins/axon-book"
 	fact "github.com/benaskins/axon-fact"
 	"github.com/benaskins/axon-book/gl"
 )
@@ -109,6 +110,9 @@ func run() error {
 	summaryStore := gl.NewDailySummaryStore(db)
 	handler := gl.NewHandler(ledger, accounts, projection, summaryStore)
 	handler.RegisterRoutes(mux, requireAuth)
+
+	// Serve embedded SvelteKit UI
+	mux.Handle("GET /", axon.SPAHandler(book.StaticFiles, "static", axon.WithStaticPrefix("/_app/")))
 
 	slog.Info("serving", "port", port, "auth_url", authURL)
 	axon.ListenAndServe(port, axon.StandardMiddleware(mux))
