@@ -20,8 +20,8 @@ Command → Event → Reactor → Projection
 
 ## Key Files
 
-- `gl/ledger.go` — GeneralLedger aggregate: post entries, replay from events
-- `gl/entry.go` — JournalEntry and LineItem types (debit/credit with decimal amounts)
+- `gl/ledger.go` — Ledger aggregate: validates and posts journal entries to event store
+- `gl/entry.go` — JournalEntryPosted event data and Line type (debit/credit with decimal amounts)
 - `gl/account.go` — Chart of accounts (CRUD, PostgreSQL-backed)
 - `gl/events.go` — Domain event types (EntryPosted, etc.)
 - `gl/reactor.go` — Event reactor: subscribes to events, drives projections
