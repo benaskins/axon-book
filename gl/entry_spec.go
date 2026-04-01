@@ -7,14 +7,14 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// ViolationError wraps a spec.Result as an error so callers can access
+// ViolationError wraps spec.Violations as an error so callers can access
 // structured violations via type assertion.
 type ViolationError struct {
-	Result spec.Result
+	Violations spec.Violations
 }
 
 func (e *ViolationError) Error() string {
-	codes := e.Result.ViolationCodes()
+	codes := e.Violations.Codes()
 	strs := make([]string, len(codes))
 	for i, c := range codes {
 		strs[i] = string(c)

@@ -20,9 +20,9 @@ func TestJournalEntrySpec_Valid(t *testing.T) {
 		},
 	}
 
-	result := spec.Evaluate(entry, JournalEntryIsValid)
+	result := JournalEntryIsValid.Evaluate(entry)
 	if !result.IsValid() {
-		t.Fatalf("expected valid, got violations: %v", result.ViolationCodes())
+		t.Fatalf("expected valid, got violations: %v", result.Codes())
 	}
 }
 
@@ -33,7 +33,7 @@ func TestJournalEntrySpec_TooFewLines(t *testing.T) {
 		},
 	}
 
-	result := spec.Evaluate(entry, JournalEntryIsValid)
+	result := JournalEntryIsValid.Evaluate(entry)
 	assertHasViolation(t, result, MustHaveAtLeastTwoLines)
 }
 
@@ -45,11 +45,11 @@ func TestJournalEntrySpec_Unbalanced(t *testing.T) {
 		},
 	}
 
-	result := spec.Evaluate(entry, JournalEntryIsValid)
+	result := JournalEntryIsValid.Evaluate(entry)
 	assertHasViolation(t, result, DebitsMustEqualCredits)
 
 	// Context should carry the totals
-	for _, v := range result.Violations {
+	for _, v := range result.Items {
 		if v.Code == DebitsMustEqualCredits {
 			if v.Context["total_debits"] != "1000" {
 				t.Errorf("expected total_debits=1000, got %v", v.Context["total_debits"])
@@ -69,19 +69,18 @@ func TestJournalEntrySpec_ZeroAmounts(t *testing.T) {
 		},
 	}
 
-	result := spec.Evaluate(entry, JournalEntryIsValid)
+	result := JournalEntryIsValid.Evaluate(entry)
 	assertHasViolation(t, result, MustHaveNonZeroAmounts)
 }
 
 func TestJournalEntrySpec_MultipleViolations(t *testing.T) {
-	// Single zero-amount line: too few lines + zero amounts
 	entry := JournalEntryPosted{
 		Lines: []Line{
 			{Account: "1000", Debit: decimal.Zero},
 		},
 	}
 
-	result := spec.Evaluate(entry, JournalEntryIsValid)
+	result := JournalEntryIsValid.Evaluate(entry)
 	assertHasViolation(t, result, MustHaveAtLeastTwoLines)
 	assertHasViolation(t, result, MustHaveNonZeroAmounts)
 }
@@ -109,15 +108,15 @@ func TestViolationError_FromLedger(t *testing.T) {
 		t.Fatalf("expected ViolationError, got %T: %v", err, err)
 	}
 
-	assertHasViolation(t, ve.Result, DebitsMustEqualCredits)
+	assertHasViolation(t, ve.Violations, DebitsMustEqualCredits)
 }
 
-func assertHasViolation(t *testing.T, result spec.Result, code spec.Code) {
+func assertHasViolation(t *testing.T, violations spec.Violations, code spec.Code) {
 	t.Helper()
-	for _, v := range result.Violations {
+	for _, v := range violations.Items {
 		if v.Code == code {
 			return
 		}
 	}
-	t.Errorf("expected violation %q, got %v", code, result.ViolationCodes())
+	t.Errorf("expected violation %q, got %v", code, violations.Codes())
 }

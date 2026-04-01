@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	fact "github.com/benaskins/axon-fact"
-	spec "github.com/benaskins/axon-spec"
 	"github.com/google/uuid"
 )
 
@@ -53,9 +52,9 @@ func (l *Ledger) PostWithMetadata(ctx context.Context, entry JournalEntryPosted,
 	}
 
 	// Validate domain business rules
-	result := spec.Evaluate(entry, JournalEntryIsValid)
-	if !result.IsValid() {
-		return "", &ViolationError{Result: result}
+	violations := JournalEntryIsValid.Evaluate(entry)
+	if !violations.IsValid() {
+		return "", &ViolationError{Violations: violations}
 	}
 
 	// Validate accounts exist and are active (requires I/O)
