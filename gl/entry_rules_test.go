@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	spec "github.com/benaskins/axon-spec"
+	"github.com/benaskins/axon-rule"
 	"github.com/shopspring/decimal"
 )
 
@@ -111,7 +111,7 @@ func TestViolationError_FromLedger(t *testing.T) {
 	assertHasViolation(t, ve.Violations, DebitsMustEqualCredits)
 }
 
-func assertHasViolation(t *testing.T, violations spec.Violations, code spec.Code) {
+func assertHasViolation(t *testing.T, violations rule.Violations, code rule.Code) {
 	t.Helper()
 	for _, v := range violations.Items {
 		if v.Code == code {

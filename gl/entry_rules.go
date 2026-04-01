@@ -3,14 +3,14 @@ package gl
 import (
 	"strings"
 
-	spec "github.com/benaskins/axon-spec"
+	"github.com/benaskins/axon-rule"
 	"github.com/shopspring/decimal"
 )
 
-// ViolationError wraps spec.Violations as an error so callers can access
+// ViolationError wraps rule.Violations as an error so callers can access
 // structured violations via type assertion.
 type ViolationError struct {
-	Violations spec.Violations
+	Violations rule.Violations
 }
 
 func (e *ViolationError) Error() string {
@@ -24,29 +24,29 @@ func (e *ViolationError) Error() string {
 
 // Violation codes for journal entry business rules.
 const (
-	MustHaveAtLeastTwoLines spec.Code = "must-have-at-least-two-lines"
-	DebitsMustEqualCredits  spec.Code = "debits-must-equal-credits"
-	MustHaveNonZeroAmounts  spec.Code = "must-have-non-zero-amounts"
+	MustHaveAtLeastTwoLines rule.Code = "must-have-at-least-two-lines"
+	DebitsMustEqualCredits  rule.Code = "debits-must-equal-credits"
+	MustHaveNonZeroAmounts  rule.Code = "must-have-non-zero-amounts"
 )
 
 // JournalEntryIsValid defines the business rules for posting a journal entry.
 // Account existence is validated separately as it requires I/O.
-var JournalEntryIsValid = spec.AllOf(
-	spec.New(MustHaveAtLeastTwoLines, JournalEntryPosted.HasAtLeastTwoLines),
-	spec.New(DebitsMustEqualCredits, JournalEntryPosted.DebitsEqualCredits),
-	spec.New(MustHaveNonZeroAmounts, JournalEntryPosted.HasNonZeroAmounts),
+var JournalEntryIsValid = rule.AllOf(
+	rule.New(MustHaveAtLeastTwoLines, JournalEntryPosted.HasAtLeastTwoLines),
+	rule.New(DebitsMustEqualCredits, JournalEntryPosted.DebitsEqualCredits),
+	rule.New(MustHaveNonZeroAmounts, JournalEntryPosted.HasNonZeroAmounts),
 )
 
 // HasAtLeastTwoLines checks the entry has two or more lines.
-func (e JournalEntryPosted) HasAtLeastTwoLines() spec.Verdict {
+func (e JournalEntryPosted) HasAtLeastTwoLines() rule.Verdict {
 	if len(e.Lines) >= 2 {
-		return spec.Pass()
+		return rule.Pass()
 	}
-	return spec.Fail()
+	return rule.Fail()
 }
 
 // DebitsEqualCredits checks total base-currency debits equal credits.
-func (e JournalEntryPosted) DebitsEqualCredits() spec.Verdict {
+func (e JournalEntryPosted) DebitsEqualCredits() rule.Verdict {
 	totalDebits := decimal.Zero
 	totalCredits := decimal.Zero
 	for _, line := range e.Lines {
@@ -55,23 +55,23 @@ func (e JournalEntryPosted) DebitsEqualCredits() spec.Verdict {
 		totalCredits = totalCredits.Add(c)
 	}
 	if totalDebits.Equal(totalCredits) {
-		return spec.Pass()
+		return rule.Pass()
 	}
-	return spec.FailWith(map[string]any{
+	return rule.FailWith(map[string]any{
 		"total_debits":  totalDebits.String(),
 		"total_credits": totalCredits.String(),
 	})
 }
 
 // HasNonZeroAmounts checks the entry has non-zero total amounts.
-func (e JournalEntryPosted) HasNonZeroAmounts() spec.Verdict {
+func (e JournalEntryPosted) HasNonZeroAmounts() rule.Verdict {
 	total := decimal.Zero
 	for _, line := range e.Lines {
 		d, c := line.BaseAmount()
 		total = total.Add(d).Add(c)
 	}
 	if !total.IsZero() {
-		return spec.Pass()
+		return rule.Pass()
 	}
-	return spec.Fail()
+	return rule.Fail()
 }

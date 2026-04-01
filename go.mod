@@ -5,7 +5,7 @@ go 1.26.1
 require (
 	github.com/benaskins/axon v0.4.0
 	github.com/benaskins/axon-fact v0.1.4
-	github.com/benaskins/axon-spec v0.0.0
+	github.com/benaskins/axon-rule v0.0.0
 	github.com/google/uuid v1.6.0
 	github.com/shopspring/decimal v1.4.0
 )
@@ -50,4 +50,4 @@ replace github.com/benaskins/axon-fact => ../axon-fact
 
 replace github.com/benaskins/axon => ../axon
 
-replace github.com/benaskins/axon-spec => ../axon-spec
+replace github.com/benaskins/axon-rule => ../axon-rule
