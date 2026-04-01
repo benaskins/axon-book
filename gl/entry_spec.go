@@ -37,13 +37,16 @@ var JournalEntryIsValid = spec.AllOf(
 	spec.New(MustHaveNonZeroAmounts, JournalEntryPosted.HasNonZeroAmounts),
 )
 
-// HasAtLeastTwoLines returns true when the entry has two or more lines.
-func (e JournalEntryPosted) HasAtLeastTwoLines() (bool, map[string]any) {
-	return len(e.Lines) >= 2, nil
+// HasAtLeastTwoLines checks the entry has two or more lines.
+func (e JournalEntryPosted) HasAtLeastTwoLines() spec.PredicateResult {
+	if len(e.Lines) >= 2 {
+		return spec.Pass()
+	}
+	return spec.Fail()
 }
 
-// DebitsEqualCredits returns true when total base-currency debits equal credits.
-func (e JournalEntryPosted) DebitsEqualCredits() (bool, map[string]any) {
+// DebitsEqualCredits checks total base-currency debits equal credits.
+func (e JournalEntryPosted) DebitsEqualCredits() spec.PredicateResult {
 	totalDebits := decimal.Zero
 	totalCredits := decimal.Zero
 	for _, line := range e.Lines {
@@ -51,19 +54,24 @@ func (e JournalEntryPosted) DebitsEqualCredits() (bool, map[string]any) {
 		totalDebits = totalDebits.Add(d)
 		totalCredits = totalCredits.Add(c)
 	}
-	ok := totalDebits.Equal(totalCredits)
-	return ok, map[string]any{
+	if totalDebits.Equal(totalCredits) {
+		return spec.Pass()
+	}
+	return spec.FailWith(map[string]any{
 		"total_debits":  totalDebits.String(),
 		"total_credits": totalCredits.String(),
-	}
+	})
 }
 
-// HasNonZeroAmounts returns true when the entry has non-zero total amounts.
-func (e JournalEntryPosted) HasNonZeroAmounts() (bool, map[string]any) {
+// HasNonZeroAmounts checks the entry has non-zero total amounts.
+func (e JournalEntryPosted) HasNonZeroAmounts() spec.PredicateResult {
 	total := decimal.Zero
 	for _, line := range e.Lines {
 		d, c := line.BaseAmount()
 		total = total.Add(d).Add(c)
 	}
-	return !total.IsZero(), nil
+	if !total.IsZero() {
+		return spec.Pass()
+	}
+	return spec.Fail()
 }
