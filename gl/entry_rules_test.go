@@ -6,11 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/benaskins/axon-rule"
 	"github.com/shopspring/decimal"
 )
 
-func TestJournalEntrySpec_Valid(t *testing.T) {
+func TestJournalEntryRules_Valid(t *testing.T) {
 	entry := JournalEntryPosted{
 		Date:        time.Date(2026, 3, 1, 0, 0, 0, 0, time.UTC),
 		Description: "Service revenue",
@@ -26,7 +25,7 @@ func TestJournalEntrySpec_Valid(t *testing.T) {
 	}
 }
 
-func TestJournalEntrySpec_TooFewLines(t *testing.T) {
+func TestJournalEntryRules_TooFewLines(t *testing.T) {
 	entry := JournalEntryPosted{
 		Lines: []Line{
 			{Account: "1000", Debit: decimal.NewFromInt(100)},
@@ -34,10 +33,10 @@ func TestJournalEntrySpec_TooFewLines(t *testing.T) {
 	}
 
 	result := JournalEntryIsValid.Evaluate(entry)
-	assertHasViolation(t, result, MustHaveAtLeastTwoLines)
+	assertHasViolation(t, result, "TooFewLines")
 }
 
-func TestJournalEntrySpec_Unbalanced(t *testing.T) {
+func TestJournalEntryRules_Unbalanced(t *testing.T) {
 	entry := JournalEntryPosted{
 		Lines: []Line{
 			{Account: "1000", Debit: decimal.NewFromInt(1000)},
@@ -46,11 +45,11 @@ func TestJournalEntrySpec_Unbalanced(t *testing.T) {
 	}
 
 	result := JournalEntryIsValid.Evaluate(entry)
-	assertHasViolation(t, result, DebitsMustEqualCredits)
+	assertHasViolation(t, result, "BalanceMismatch")
 
 	// Context should carry the totals as a typed struct
 	for _, v := range result.Items {
-		if v.Code == DebitsMustEqualCredits {
+		if v.Code == "BalanceMismatch" {
 			m, ok := v.Context.(BalanceMismatch)
 			if !ok {
 				t.Fatalf("expected BalanceMismatch context, got %T", v.Context)
@@ -65,7 +64,7 @@ func TestJournalEntrySpec_Unbalanced(t *testing.T) {
 	}
 }
 
-func TestJournalEntrySpec_ZeroAmounts(t *testing.T) {
+func TestJournalEntryRules_ZeroAmounts(t *testing.T) {
 	entry := JournalEntryPosted{
 		Lines: []Line{
 			{Account: "1000", Debit: decimal.Zero},
@@ -74,10 +73,10 @@ func TestJournalEntrySpec_ZeroAmounts(t *testing.T) {
 	}
 
 	result := JournalEntryIsValid.Evaluate(entry)
-	assertHasViolation(t, result, MustHaveNonZeroAmounts)
+	assertHasViolation(t, result, "ZeroAmounts")
 }
 
-func TestJournalEntrySpec_MultipleViolations(t *testing.T) {
+func TestJournalEntryRules_MultipleViolations(t *testing.T) {
 	entry := JournalEntryPosted{
 		Lines: []Line{
 			{Account: "1000", Debit: decimal.Zero},
@@ -85,8 +84,8 @@ func TestJournalEntrySpec_MultipleViolations(t *testing.T) {
 	}
 
 	result := JournalEntryIsValid.Evaluate(entry)
-	assertHasViolation(t, result, MustHaveAtLeastTwoLines)
-	assertHasViolation(t, result, MustHaveNonZeroAmounts)
+	assertHasViolation(t, result, "TooFewLines")
+	assertHasViolation(t, result, "ZeroAmounts")
 }
 
 func TestViolationError_FromLedger(t *testing.T) {
@@ -112,13 +111,13 @@ func TestViolationError_FromLedger(t *testing.T) {
 		t.Fatalf("expected ViolationError, got %T: %v", err, err)
 	}
 
-	assertHasViolation(t, ve.Violations, DebitsMustEqualCredits)
+	assertHasViolation(t, ve.Violations, "BalanceMismatch")
 }
 
-func assertHasViolation(t *testing.T, violations rule.Violations, code rule.Code) {
+func assertHasViolation(t *testing.T, violations interface{ Codes() []string }, code string) {
 	t.Helper()
-	for _, v := range violations.Items {
-		if v.Code == code {
+	for _, c := range violations.Codes() {
+		if c == code {
 			return
 		}
 	}

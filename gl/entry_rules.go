@@ -15,12 +15,12 @@ type ViolationError struct {
 
 func (e *ViolationError) Error() string {
 	codes := e.Violations.Codes()
-	strs := make([]string, len(codes))
-	for i, c := range codes {
-		strs[i] = string(c)
-	}
-	return "validation failed: " + strings.Join(strs, ", ")
+	return "validation failed: " + strings.Join(codes, ", ")
 }
+
+// Violation context types for journal entry business rules.
+type TooFewLines struct{}
+type ZeroAmounts struct{}
 
 // BalanceMismatch carries the totals when debits don't equal credits.
 type BalanceMismatch struct {
@@ -28,19 +28,12 @@ type BalanceMismatch struct {
 	TotalCredits string
 }
 
-// Violation codes for journal entry business rules.
-const (
-	MustHaveAtLeastTwoLines rule.Code = "must-have-at-least-two-lines"
-	DebitsMustEqualCredits  rule.Code = "debits-must-equal-credits"
-	MustHaveNonZeroAmounts  rule.Code = "must-have-non-zero-amounts"
-)
-
 // JournalEntryIsValid defines the business rules for posting a journal entry.
 // Account existence is validated separately as it requires I/O.
 var JournalEntryIsValid = rule.AllOf(
-	rule.New(MustHaveAtLeastTwoLines, JournalEntryPosted.HasAtLeastTwoLines),
-	rule.New(DebitsMustEqualCredits, JournalEntryPosted.DebitsEqualCredits),
-	rule.New(MustHaveNonZeroAmounts, JournalEntryPosted.HasNonZeroAmounts),
+	rule.New(JournalEntryPosted.HasAtLeastTwoLines),
+	rule.New(JournalEntryPosted.DebitsEqualCredits),
+	rule.New(JournalEntryPosted.HasNonZeroAmounts),
 )
 
 // HasAtLeastTwoLines checks the entry has two or more lines.
@@ -48,7 +41,7 @@ func (e JournalEntryPosted) HasAtLeastTwoLines() rule.Verdict {
 	if len(e.Lines) >= 2 {
 		return rule.Pass()
 	}
-	return rule.Fail()
+	return rule.FailWith(TooFewLines{})
 }
 
 // DebitsEqualCredits checks total base-currency debits equal credits.
@@ -79,5 +72,5 @@ func (e JournalEntryPosted) HasNonZeroAmounts() rule.Verdict {
 	if !total.IsZero() {
 		return rule.Pass()
 	}
-	return rule.Fail()
+	return rule.FailWith(ZeroAmounts{})
 }
