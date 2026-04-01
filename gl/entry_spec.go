@@ -38,7 +38,7 @@ var JournalEntryIsValid = spec.AllOf(
 )
 
 // HasAtLeastTwoLines checks the entry has two or more lines.
-func (e JournalEntryPosted) HasAtLeastTwoLines() spec.PredicateResult {
+func (e JournalEntryPosted) HasAtLeastTwoLines() spec.Verdict {
 	if len(e.Lines) >= 2 {
 		return spec.Pass()
 	}
@@ -46,7 +46,7 @@ func (e JournalEntryPosted) HasAtLeastTwoLines() spec.PredicateResult {
 }
 
 // DebitsEqualCredits checks total base-currency debits equal credits.
-func (e JournalEntryPosted) DebitsEqualCredits() spec.PredicateResult {
+func (e JournalEntryPosted) DebitsEqualCredits() spec.Verdict {
 	totalDebits := decimal.Zero
 	totalCredits := decimal.Zero
 	for _, line := range e.Lines {
@@ -64,7 +64,7 @@ func (e JournalEntryPosted) DebitsEqualCredits() spec.PredicateResult {
 }
 
 // HasNonZeroAmounts checks the entry has non-zero total amounts.
-func (e JournalEntryPosted) HasNonZeroAmounts() spec.PredicateResult {
+func (e JournalEntryPosted) HasNonZeroAmounts() spec.Verdict {
 	total := decimal.Zero
 	for _, line := range e.Lines {
 		d, c := line.BaseAmount()
