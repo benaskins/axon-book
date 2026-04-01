@@ -22,6 +22,12 @@ func (e *ViolationError) Error() string {
 	return "validation failed: " + strings.Join(strs, ", ")
 }
 
+// BalanceMismatch carries the totals when debits don't equal credits.
+type BalanceMismatch struct {
+	TotalDebits  string
+	TotalCredits string
+}
+
 // Violation codes for journal entry business rules.
 const (
 	MustHaveAtLeastTwoLines rule.Code = "must-have-at-least-two-lines"
@@ -57,9 +63,9 @@ func (e JournalEntryPosted) DebitsEqualCredits() rule.Verdict {
 	if totalDebits.Equal(totalCredits) {
 		return rule.Pass()
 	}
-	return rule.FailWith(map[string]any{
-		"total_debits":  totalDebits.String(),
-		"total_credits": totalCredits.String(),
+	return rule.FailWith(BalanceMismatch{
+		TotalDebits:  totalDebits.String(),
+		TotalCredits: totalCredits.String(),
 	})
 }
 

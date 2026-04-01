@@ -48,14 +48,18 @@ func TestJournalEntrySpec_Unbalanced(t *testing.T) {
 	result := JournalEntryIsValid.Evaluate(entry)
 	assertHasViolation(t, result, DebitsMustEqualCredits)
 
-	// Context should carry the totals
+	// Context should carry the totals as a typed struct
 	for _, v := range result.Items {
 		if v.Code == DebitsMustEqualCredits {
-			if v.Context["total_debits"] != "1000" {
-				t.Errorf("expected total_debits=1000, got %v", v.Context["total_debits"])
+			m, ok := v.Context.(BalanceMismatch)
+			if !ok {
+				t.Fatalf("expected BalanceMismatch context, got %T", v.Context)
 			}
-			if v.Context["total_credits"] != "500" {
-				t.Errorf("expected total_credits=500, got %v", v.Context["total_credits"])
+			if m.TotalDebits != "1000" {
+				t.Errorf("expected TotalDebits=1000, got %v", m.TotalDebits)
+			}
+			if m.TotalCredits != "500" {
+				t.Errorf("expected TotalCredits=500, got %v", m.TotalCredits)
 			}
 		}
 	}
