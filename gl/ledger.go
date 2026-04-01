@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	fact "github.com/benaskins/axon-fact"
+	spec "github.com/benaskins/axon-spec"
 	"github.com/google/uuid"
-	"github.com/shopspring/decimal"
 )
 
 // AccountChecker validates that an account exists and is active.
@@ -48,15 +48,17 @@ func (l *Ledger) Post(ctx context.Context, entry JournalEntryPosted) (string, er
 // Use this to link journal entries to their causing domain events
 // via a causation_id.
 func (l *Ledger) PostWithMetadata(ctx context.Context, entry JournalEntryPosted, metadata map[string]string) (string, error) {
-	if len(entry.Lines) < 2 {
-		return "", fmt.Errorf("journal entry must have at least two lines")
-	}
-
 	if entry.Kind == "" {
 		entry.Kind = Operating
 	}
 
-	// Validate accounts exist and are active
+	// Validate domain business rules
+	result := spec.Evaluate(entry, JournalEntryIsValid)
+	if !result.IsValid() {
+		return "", &ViolationError{Result: result}
+	}
+
+	// Validate accounts exist and are active (requires I/O)
 	for _, line := range entry.Lines {
 		exists, err := l.accounts.Exists(ctx, line.Account)
 		if err != nil {
@@ -65,22 +67,6 @@ func (l *Ledger) PostWithMetadata(ctx context.Context, entry JournalEntryPosted,
 		if !exists {
 			return "", fmt.Errorf("account %s does not exist or is inactive", line.Account)
 		}
-	}
-
-	// Validate debits == credits in base currency
-	totalDebits := decimal.Zero
-	totalCredits := decimal.Zero
-	for _, line := range entry.Lines {
-		d, c := line.BaseAmount()
-		totalDebits = totalDebits.Add(d)
-		totalCredits = totalCredits.Add(c)
-	}
-	if !totalDebits.Equal(totalCredits) {
-		return "", fmt.Errorf("entry does not balance: debits=%s credits=%s", totalDebits, totalCredits)
-	}
-
-	if totalDebits.IsZero() {
-		return "", fmt.Errorf("journal entry must have non-zero amounts")
 	}
 
 	// Assign entry ID if not set
