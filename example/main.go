@@ -115,6 +115,6 @@ func run() error {
 	mux.Handle("GET /", axon.SPAHandler(book.StaticFiles, "static", axon.WithStaticPrefix("/_app/")))
 
 	slog.Info("serving", "port", port, "auth_url", authURL)
-	axon.ListenAndServe(port, axon.StandardMiddleware(mux))
+	axon.ListenAndServe(port, mux)
 	return nil
 }

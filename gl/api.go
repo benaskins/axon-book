@@ -158,14 +158,7 @@ func (h *Handler) ListAccounts(w http.ResponseWriter, r *http.Request) {
 
 	resp := make([]accountResponse, len(accounts))
 	for i, a := range accounts {
-		resp[i] = accountResponse{
-			Number:    a.Number,
-			Name:      a.Name,
-			Type:      a.Type,
-			Parent:    a.Parent,
-			Active:    a.Active,
-			CreatedAt: a.CreatedAt,
-		}
+		resp[i] = accountResponse(a)
 	}
 	axon.WriteJSON(w, http.StatusOK, resp)
 }
