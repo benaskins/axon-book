@@ -18,7 +18,8 @@ func (e *ViolationError) Error() string {
 	return "validation failed: " + strings.Join(codes, ", ")
 }
 
-// Violation context types for journal entry business rules.
+type MissingDescription struct{}
+type MissingDate struct{}
 type TooFewLines struct{}
 type ZeroAmounts struct{}
 
@@ -31,10 +32,26 @@ type BalanceMismatch struct {
 // JournalEntryIsValid defines the business rules for posting a journal entry.
 // Account existence is validated separately as it requires I/O.
 var JournalEntryIsValid = rule.AllOf(
+	rule.New(JournalEntryPosted.HasDescription),
+	rule.New(JournalEntryPosted.HasDate),
 	rule.New(JournalEntryPosted.HasAtLeastTwoLines),
 	rule.New(JournalEntryPosted.DebitsEqualCredits),
 	rule.New(JournalEntryPosted.HasNonZeroAmounts),
 )
+
+func (e JournalEntryPosted) HasDescription() rule.Verdict {
+	if e.Description != "" {
+		return rule.Pass()
+	}
+	return rule.FailWith(MissingDescription{})
+}
+
+func (e JournalEntryPosted) HasDate() rule.Verdict {
+	if !e.Date.IsZero() {
+		return rule.Pass()
+	}
+	return rule.FailWith(MissingDate{})
+}
 
 // HasAtLeastTwoLines checks the entry has two or more lines.
 func (e JournalEntryPosted) HasAtLeastTwoLines() rule.Verdict {

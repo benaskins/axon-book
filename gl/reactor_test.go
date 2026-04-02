@@ -108,8 +108,9 @@ func TestReactor_SaleCompleted(t *testing.T) {
 
 	// First invest so there's cash
 	investData, _ := json.Marshal(InvestmentMade{
-		Date:   "2025-01-01",
-		Amount: decimal.NewFromInt(5000),
+		Date:        "2025-01-01",
+		Amount:      decimal.NewFromInt(5000),
+		Description: "Initial investment",
 	})
 	store.Append(ctx, StreamOperations, []fact.Event{
 		{ID: "inv-1", Type: EventInvestmentMade, Data: investData},
@@ -157,7 +158,7 @@ func TestReactor_SupplyPurchased(t *testing.T) {
 	store, _, projection := newReactorTestLedger()
 	ctx := context.Background()
 
-	investData, _ := json.Marshal(InvestmentMade{Date: "2025-01-01", Amount: decimal.NewFromInt(5000)})
+	investData, _ := json.Marshal(InvestmentMade{Date: "2025-01-01", Amount: decimal.NewFromInt(5000), Description: "Initial investment"})
 	store.Append(ctx, StreamOperations, []fact.Event{
 		{ID: "inv-1", Type: EventInvestmentMade, Data: investData},
 	})
@@ -223,8 +224,9 @@ func TestReactor_IgnoresLedgerEvents(t *testing.T) {
 
 	// Append a domain event to trigger the reactor
 	investData, _ := json.Marshal(InvestmentMade{
-		Date:   "2025-01-01",
-		Amount: decimal.NewFromInt(100),
+		Date:        "2025-01-01",
+		Amount:      decimal.NewFromInt(100),
+		Description: "Initial investment",
 	})
 	err := store.Append(ctx, StreamOperations, []fact.Event{
 		{ID: "inv-1", Type: EventInvestmentMade, Data: investData},

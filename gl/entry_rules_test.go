@@ -114,6 +114,32 @@ func TestViolationError_FromLedger(t *testing.T) {
 	assertHasViolation(t, ve.Violations, "BalanceMismatch")
 }
 
+func TestJournalEntryRules_MissingDescription(t *testing.T) {
+	entry := JournalEntryPosted{
+		Date: time.Date(2026, 3, 1, 0, 0, 0, 0, time.UTC),
+		Lines: []Line{
+			{Account: "1000", Debit: decimal.NewFromInt(100)},
+			{Account: "4000", Credit: decimal.NewFromInt(100)},
+		},
+	}
+
+	result := JournalEntryIsValid.Evaluate(entry)
+	assertHasViolation(t, result, "MissingDescription")
+}
+
+func TestJournalEntryRules_MissingDate(t *testing.T) {
+	entry := JournalEntryPosted{
+		Description: "Service revenue",
+		Lines: []Line{
+			{Account: "1000", Debit: decimal.NewFromInt(100)},
+			{Account: "4000", Credit: decimal.NewFromInt(100)},
+		},
+	}
+
+	result := JournalEntryIsValid.Evaluate(entry)
+	assertHasViolation(t, result, "MissingDate")
+}
+
 func assertHasViolation(t *testing.T, violations interface{ Codes() []string }, code string) {
 	t.Helper()
 	for _, c := range violations.Codes() {
