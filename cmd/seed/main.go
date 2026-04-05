@@ -20,9 +20,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/benaskins/axon"
-	fact "github.com/benaskins/axon-fact"
+	"github.com/benaskins/axon-base/migration"
+	"github.com/benaskins/axon-base/pool"
 	"github.com/benaskins/axon-book/gl"
+	fact "github.com/benaskins/axon-fact"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 )
@@ -48,14 +49,19 @@ func run() error {
 	}
 
 	// --- Database ---
-	db, err := axon.OpenDB(dsn, "book")
+	p, err := pool.NewPool(ctx, dsn, "book")
 	if err != nil {
 		return fmt.Errorf("open database: %w", err)
 	}
-	if err := axon.RunMigrations(db, fact.Migrations); err != nil {
+	defer p.Close()
+	db, err := p.StdDB()
+	if err != nil {
+		return fmt.Errorf("get sql.DB: %w", err)
+	}
+	if err := migration.Run(db, fact.Migrations, "migrations"); err != nil {
 		return fmt.Errorf("run event migrations: %w", err)
 	}
-	if err := axon.RunMigrations(db, gl.Migrations); err != nil {
+	if err := migration.Run(db, gl.Migrations, "migrations"); err != nil {
 		return fmt.Errorf("run gl migrations: %w", err)
 	}
 
