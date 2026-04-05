@@ -13,8 +13,9 @@ go get github.com/benaskins/axon-book@latest
 axon-book is a domain package — it provides types, event handling, and HTTP handlers but no `main` function. You assemble it in your own composition root by wiring up PostgreSQL, an event store, and projections. See [`example/main.go`](example/main.go) for a complete wiring example.
 
 ```go
-db, _ := axon.OpenDB(dsn, "book")
-axon.MustRunMigrations(db, gl.Migrations)
+p, _ := pool.NewPool(ctx, dsn, "book")
+db, _ := p.StdDB()
+migration.Run(db, gl.Migrations, "migrations")
 
 store := fact.NewPostgresStore(db)
 projection := gl.NewBalanceProjection()
