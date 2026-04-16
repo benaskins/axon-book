@@ -1,5 +1,11 @@
-github.com/benaskins/axon-base v0.0.0-20260405012529-8279a79b6723 h1:AEsG6G2Tdh77MGDu2yB6cFlcbWYUIIcFyxLqFwdK/40=
-github.com/benaskins/axon-base v0.0.0-20260405012529-8279a79b6723/go.mod h1:IuR8ZrfTDpPl87Jl34wlZG33qVRey4Av+vc2wN8Vgto=
+github.com/benaskins/axon v0.11.0 h1:GWTo44WsdiuY1EF+Rlaql/h04n/7XKq47S3pFjM4KTk=
+github.com/benaskins/axon v0.11.0/go.mod h1:6lPwVHo8ANK/ea1rV7FOyddCfWjsE5hqgNOwAMKbbPk=
+github.com/benaskins/axon-base v0.11.0 h1:2Dxgd+2Kb0dJKPgV0gpxH95lxtWJ1ht/KmW2gOeyFKc=
+github.com/benaskins/axon-base v0.11.0/go.mod h1:IuR8ZrfTDpPl87Jl34wlZG33qVRey4Av+vc2wN8Vgto=
+github.com/benaskins/axon-fact v0.13.0 h1:YLTCiUkB1lrns1WwJKbacubi/JkInzn/8P1djDw6c/w=
+github.com/benaskins/axon-fact v0.13.0/go.mod h1:fbrUptVmhYg7if9gG3xVphhT0OsQFIetkdP5ciiuh0s=
+github.com/benaskins/axon-rule v0.11.0 h1:3+L42MRprvY/RRdZsn49ehnHo1H2s6EkjCO7COeGCC8=
+github.com/benaskins/axon-rule v0.11.0/go.mod h1:RCbW9aYWM94cdXKPB14P+MsX8sDvh2RDSpiaOMiVpFw=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/caarlos0/env/v11 v11.3.1 h1:cArPWC15hWmEt+gWk7YBi7lEXTXCvpaSdCiZE2X5mCA=

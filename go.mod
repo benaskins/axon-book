@@ -3,10 +3,10 @@ module github.com/benaskins/axon-book
 go 1.26.1
 
 require (
-	github.com/benaskins/axon v0.4.0
-	github.com/benaskins/axon-base v0.0.0-20260405012529-8279a79b6723
+	github.com/benaskins/axon v0.11.0
+	github.com/benaskins/axon-base v0.11.0
 	github.com/benaskins/axon-fact v0.13.0
-	github.com/benaskins/axon-rule v0.0.0
+	github.com/benaskins/axon-rule v0.11.0
 	github.com/google/uuid v1.6.0
 	github.com/shopspring/decimal v1.4.0
 )
@@ -45,10 +45,3 @@ require (
 	golang.org/x/text v0.34.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
-
-// Remove this replace directive after releasing axon-fact with PostgresStore.
-replace github.com/benaskins/axon-fact => ../axon-fact
-
-replace github.com/benaskins/axon => ../axon
-
-replace github.com/benaskins/axon-rule => ../axon-rule
