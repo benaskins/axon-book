@@ -2,7 +2,7 @@
 //
 // Wires up:
 //   - PostgreSQL (pool.NewPool + migrations for both events and accounts tables)
-//   - Event sourcing (fact.PostgresStore with balance projection + replay)
+//   - Event sourcing (factpg.Store with balance projection + replay)
 //   - Auth (axon.RequireAuth via axon-auth)
 //   - REST API (gl.Handler.RegisterRoutes)
 //   - Graceful shutdown (axon.ListenAndServe)
@@ -27,7 +27,7 @@ import (
 	"github.com/benaskins/axon-base/pool"
 	book "github.com/benaskins/axon-book"
 	"github.com/benaskins/axon-book/gl"
-	fact "github.com/benaskins/axon-fact"
+	factpg "github.com/benaskins/axon-fact/postgres"
 )
 
 func main() {
@@ -70,7 +70,7 @@ func run() error {
 	}
 
 	// Run migrations for the events table (from axon-fact)
-	if err := migration.Run(db, fact.Migrations, "migrations"); err != nil {
+	if err := migration.Run(db, factpg.Migrations, "migrations"); err != nil {
 		return fmt.Errorf("run event migrations: %w", err)
 	}
 	// Run migrations for the accounts table (from axon-book/gl)
@@ -86,10 +86,10 @@ func run() error {
 	// Wire reactor: domain events on operations → journal entries on ledger.
 	// The reactor, store, and ledger form a cycle; SetLedger breaks it.
 	reactor := gl.NewReactor(nil)
-	events := fact.NewPostgresStore(db,
-		fact.WithPgProjector(reactor),
-		fact.WithPgProjector(projection),
-		fact.WithPgProjector(dailySummaryProjection),
+	events := factpg.NewStore(db,
+		factpg.WithProjector(reactor),
+		factpg.WithProjector(projection),
+		factpg.WithProjector(dailySummaryProjection),
 	)
 	ledger := gl.NewLedger(events, accounts, baseCurrency)
 	reactor.SetLedger(ledger)

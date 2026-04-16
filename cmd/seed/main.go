@@ -24,6 +24,7 @@ import (
 	"github.com/benaskins/axon-base/pool"
 	"github.com/benaskins/axon-book/gl"
 	fact "github.com/benaskins/axon-fact"
+	factpg "github.com/benaskins/axon-fact/postgres"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 )
@@ -58,7 +59,7 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("get sql.DB: %w", err)
 	}
-	if err := migration.Run(db, fact.Migrations, "migrations"); err != nil {
+	if err := migration.Run(db, factpg.Migrations, "migrations"); err != nil {
 		return fmt.Errorf("run event migrations: %w", err)
 	}
 	if err := migration.Run(db, gl.Migrations, "migrations"); err != nil {
@@ -70,11 +71,11 @@ func run() error {
 	accounts := gl.NewChartOfAccounts(db)
 
 	// Wire up the reactor: domain events → journal entries
-	var store *fact.PostgresStore
+	var store *factpg.Store
 	reactor := gl.NewReactor(nil) // placeholder, set ledger after store creation
-	store = fact.NewPostgresStore(db,
-		fact.WithPgProjector(reactor),
-		fact.WithPgProjector(projection),
+	store = factpg.NewStore(db,
+		factpg.WithProjector(reactor),
+		factpg.WithProjector(projection),
 	)
 	ledger := gl.NewLedger(store, accounts, "AUD")
 	reactor.SetLedger(ledger)

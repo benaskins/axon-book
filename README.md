@@ -17,7 +17,7 @@ p, _ := pool.NewPool(ctx, dsn, "book")
 db, _ := p.StdDB()
 migration.Run(db, gl.Migrations, "migrations")
 
-store := fact.NewPostgresStore(db)
+store := factpg.NewStore(db)
 projection := gl.NewBalanceProjection()
 store.RegisterProjector(gl.StreamLedger, projection)
 store.Replay(ctx)
